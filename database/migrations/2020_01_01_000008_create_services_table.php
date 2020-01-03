@@ -15,7 +15,15 @@ class CreateServicesTable extends Migration
     {
         Schema::create('services', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('address');
+            $table->string('zip');
+            $table->string('city');
+            $table->dateTime('start_date');
+            $table->boolean('approved')->default(0);
+            $table->unsignedBigInteger('province_id');
             $table->timestamps();
+
+            $table->foreign('province_id')->references('id')->on('provinces');
         });
     }
 

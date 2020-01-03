@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateHeadquartersTable extends Migration
+class CreateRolesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class CreateHeadquartersTable extends Migration
      */
     public function up()
     {
-        Schema::create('headquarters', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->timestamps();
+        Schema::create('roles', function (Blueprint $table) {
+            $table->unsignedBigInteger('id')->primary();
+            $table->string('name');
         });
     }
 
@@ -26,6 +26,6 @@ class CreateHeadquartersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('headquarters');
+        Schema::dropIfExists('roles');
     }
 }
