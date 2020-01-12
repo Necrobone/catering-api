@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class Headquarter extends JsonResource
@@ -9,11 +10,18 @@ class Headquarter extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            "id" => $this->id,
+            "name" => $this->name,
+            "address" => $this->address,
+            "zip" => $this->zip,
+            "city" => $this->city,
+            "provinceId" => $this->province_id,
+        ];
     }
 }
