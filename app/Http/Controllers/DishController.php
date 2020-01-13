@@ -2,50 +2,52 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\Supplier as SupplierResource;
-use App\Http\Resources\SupplierCollection;
-use App\Supplier;
+use App\Dish;
+use App\Http\Resources\Dish as DishResource;
+use App\Http\Resources\DishCollection;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class SupplierController extends Controller
+class DishController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return SupplierCollection
+     * @return DishCollection
      */
     public function index()
     {
-        return new SupplierCollection(Supplier::all());
+        return new DishCollection(Dish::all());
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param Request $request
-     * @return Supplier
+     * @return Dish
      */
     public function store(Request $request)
     {
-        $supplier = new Supplier();
+        $dish = new Dish();
 
-        $supplier->name = $request->name;
+        $dish->name = $request->name;
+        $dish->description = $request->description;
+        $dish->image = $request->image;
 
-        $supplier->save();
+        $dish->save();
 
-        return $supplier;
+        return $dish;
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
-     * @return SupplierResource
+     * @param int $id
+     * @return DishResource
      */
     public function show($id)
     {
-        return new SupplierResource(Supplier::find($id));
+        return new DishResource(Dish::find($id));
     }
 
     /**
@@ -57,13 +59,15 @@ class SupplierController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $supplier = Supplier::find($id);
+        $dish = Dish::find($id);
 
-        $supplier->name = $request->name;
+        $dish->name = $request->name;
+        $dish->description = $request->description;
+        $dish->image = $request->image;
 
-        $supplier->save();
+        $dish->save();
 
-        return $supplier;
+        return $dish;
     }
 
     /**
@@ -74,6 +78,6 @@ class SupplierController extends Controller
      */
     public function destroy($id)
     {
-        return Supplier::destroy($id);
+        return Dish::destroy($id);
     }
 }
