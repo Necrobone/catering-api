@@ -20,4 +20,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::middleware('auth:api')->group(function () {
     Route::get('/provinces', 'ProvinceController@index');
     Route::apiResource('headquarters', 'HeadquarterController');
+    Route::apiResource('suppliers', 'SupplierController');
 });

@@ -17,4 +17,20 @@ class Headquarter extends Model
     protected $fillable = [
         'name', 'address', 'zip', 'city', 'province_id',
     ];
+
+    /**
+     * Get the province that owns the headquarter.
+     */
+    public function province()
+    {
+        return $this->belongsTo('App\Province');
+    }
+
+    /**
+     * The suppliers that belong to the headquarter.
+     */
+    public function suppliers()
+    {
+        return $this->belongsToMany('App\Supplier', 'supplier_headquarters');
+    }
 }

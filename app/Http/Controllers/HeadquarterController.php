@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Headquarter;
 use App\Http\Resources\Headquarter as HeadquarterResource;
-use Illuminate\Database\Eloquent\Collection;
+use App\Http\Resources\HeadquarterCollection;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -13,11 +13,11 @@ class HeadquarterController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return Headquarter[]|Collection
+     * @return HeadquarterCollection
      */
     public function index()
     {
-        return Headquarter::all();
+        return new HeadquarterCollection(Headquarter::all());
     }
 
     /**
@@ -34,7 +34,7 @@ class HeadquarterController extends Controller
         $headquarter->address = $request->address;
         $headquarter->zip = $request->zip;
         $headquarter->city = $request->city;
-        $headquarter->province_id = $request->provinceId;
+        $headquarter->province_id = $request->province;
 
         $headquarter->save();
 
@@ -67,7 +67,7 @@ class HeadquarterController extends Controller
         $headquarter->address = $request->address;
         $headquarter->zip = $request->zip;
         $headquarter->city = $request->city;
-        $headquarter->province_id = $request->provinceId;
+        $headquarter->province_id = $request->province;
 
         $headquarter->save();
 

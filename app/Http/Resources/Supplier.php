@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class Headquarter extends JsonResource
+class Supplier extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -18,10 +18,8 @@ class Headquarter extends JsonResource
         return [
             "id" => $this->id,
             "name" => $this->name,
-            "address" => $this->address,
-            "zip" => $this->zip,
-            "city" => $this->city,
-            "province" => $this->province,
+            "headquarters" => $this->headquarters,
+            "dishes" => $this->dishes,
         ];
     }
 }
