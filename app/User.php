@@ -26,4 +26,20 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'created_at', 'updated_at', 'deleted_at'
     ];
+
+    /**
+     * The services that belong to the user.
+     */
+    public function services()
+    {
+        return $this->belongsToMany('App\Service', 'user_services');
+    }
+
+    /**
+     * Get the role that owns the user.
+     */
+    public function role()
+    {
+        return $this->belongsTo('App\Role');
+    }
 }
