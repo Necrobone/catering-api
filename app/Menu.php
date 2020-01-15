@@ -16,4 +16,12 @@ class Menu extends Model
     {
         return $this->belongsToMany('App\Dish', 'menu_dishes');
     }
+
+    /**
+     * The events that belong to the menu.
+     */
+    public function events()
+    {
+        return $this->belongsToMany('App\Event', 'event_menus');
+    }
 }
