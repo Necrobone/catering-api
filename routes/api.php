@@ -23,4 +23,5 @@ Route::middleware('auth:api')->group(function () {
     Route::apiResource('suppliers', 'SupplierController');
     Route::apiResource('dishes', 'DishController');
     Route::apiResource('menus', 'MenuController');
+    Route::apiResource('events', 'EventController');
 });
