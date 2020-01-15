@@ -21,9 +21,11 @@ class CreateServicesTable extends Migration
             $table->dateTime('start_date');
             $table->boolean('approved')->default(0);
             $table->unsignedBigInteger('province_id');
+            $table->unsignedBigInteger('event_id');
             $table->timestamps();
 
             $table->foreign('province_id')->references('id')->on('provinces');
+            $table->foreign('event_id')->references('id')->on('events');
         });
     }
 

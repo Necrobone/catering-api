@@ -18,6 +18,7 @@ class ServicesTableSeeder extends Seeder
             'city' => 'Madrid',
             'start_date' => now()->addDays(7),
             'province_id' => 28,
+            'event_id' => 1,
             'created_at' => now()
         ]);
 
