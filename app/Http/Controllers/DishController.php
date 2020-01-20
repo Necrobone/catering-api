@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Dish;
+use App\Event;
 use App\Http\Resources\Dish as DishResource;
 use App\Http\Resources\DishCollection;
+use App\Supplier;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class DishController extends Controller
 {
@@ -32,9 +35,28 @@ class DishController extends Controller
 
         $dish->name = $request->name;
         $dish->description = $request->description;
-        $dish->image = $request->image;
+
+        $fileName = Str::random(10) . '.jpg';
+        $image = substr($request->image, strpos($request->image, ',') + 1);
+
+        Storage::disk('public')->put($fileName, base64_decode($image));
+
+        $dish->image = asset("storage/{$fileName}");
 
         $dish->save();
+
+        $suppliers = [];
+        foreach ($request->suppliers as $supplier) {
+            $suppliers[] = Supplier::findOrFail($supplier);
+        }
+
+        $events = [];
+        foreach ($request->events as $event) {
+            $events[] = Event::findOrFail($event);
+        }
+
+        $dish->suppliers()->saveMany($suppliers);
+        $dish->events()->saveMany($events);
 
         return $dish;
     }
@@ -54,18 +76,39 @@ class DishController extends Controller
      * Update the specified resource in storage.
      *
      * @param Request $request
-     * @param  int  $id
-     * @return Response
+     * @param int $id
+     * @return Dish
      */
     public function update(Request $request, $id)
     {
+        /** @var Dish $dish */
         $dish = Dish::find($id);
 
         $dish->name = $request->name;
         $dish->description = $request->description;
-        $dish->image = $request->image;
+        if ($request->image !== $dish->image) {
+            $fileName = Str::random(10) . '.jpg';
+            $image = substr($request->image, strpos($request->image, ',') + 1);
+
+            Storage::disk('public')->put($fileName, base64_decode($image));
+
+            $dish->image = asset("storage/{$fileName}");
+        }
 
         $dish->save();
+
+        $suppliers = [];
+        foreach ($request->suppliers as $supplier) {
+            $suppliers[] = Supplier::findOrFail($supplier)->id;
+        }
+
+        $events = [];
+        foreach ($request->events as $event) {
+            $events[] = Event::findOrFail($event)->id;
+        }
+
+        $dish->suppliers()->sync($suppliers);
+        $dish->events()->sync($events);
 
         return $dish;
     }

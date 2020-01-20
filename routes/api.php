@@ -20,10 +20,18 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::middleware('auth:api')->group(function () {
     Route::get('/provinces', 'ProvinceController@index');
     Route::get('/roles', 'RoleController@index');
-    Route::apiResource('headquarters', 'HeadquarterController');
-    Route::apiResource('suppliers', 'SupplierController');
-    Route::apiResource('dishes', 'DishController');
-    Route::apiResource('menus', 'MenuController');
-    Route::apiResource('events', 'EventController');
-    Route::apiResource('employees', 'UserController');
+    Route::apiResources([
+        'headquarters' => 'HeadquarterController',
+        'suppliers' => 'SupplierController',
+        'dishes' => 'DishController',
+        'menus' => 'MenuController',
+        'events' => 'EventController',
+        'employees' => 'UserController',
+    ]);
+
+    Route::apiResource('services', 'ServiceController')->except([
+        'store', 'destroy',
+    ]);
+
+    Route::match(['put', 'patch'], '/services/{service}/toggle', 'ServiceController@toggle')->name('toggle');
 });

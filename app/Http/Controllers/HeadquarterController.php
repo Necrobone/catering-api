@@ -6,7 +6,6 @@ use App\Headquarter;
 use App\Http\Resources\Headquarter as HeadquarterResource;
 use App\Http\Resources\HeadquarterCollection;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 
 class HeadquarterController extends Controller
 {
@@ -57,10 +56,11 @@ class HeadquarterController extends Controller
      *
      * @param Request $request
      * @param  int  $id
-     * @return Response
+     * @return Headquarter
      */
     public function update(Request $request, $id)
     {
+        /** @var Headquarter $headquarter */
         $headquarter = Headquarter::find($id);
 
         $headquarter->name = $request->name;

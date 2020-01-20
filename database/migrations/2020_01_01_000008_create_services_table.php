@@ -19,7 +19,7 @@ class CreateServicesTable extends Migration
             $table->string('zip');
             $table->string('city');
             $table->dateTime('start_date');
-            $table->boolean('approved')->default(0);
+            $table->boolean('approved')->nullable()->default(null);
             $table->unsignedBigInteger('province_id');
             $table->unsignedBigInteger('event_id');
             $table->timestamps();

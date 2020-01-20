@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Headquarter;
 use App\Http\Resources\Supplier as SupplierResource;
 use App\Http\Resources\SupplierCollection;
 use App\Supplier;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 
 class SupplierController extends Controller
 {
@@ -34,6 +34,14 @@ class SupplierController extends Controller
 
         $supplier->save();
 
+        $headquarters = [];
+
+        foreach ($request->headquarters as $headquarter) {
+            $headquarters[] = Headquarter::findOrFail($headquarter);
+        }
+
+        $supplier->headquarters()->saveMany($headquarters);
+
         return $supplier;
     }
 
@@ -53,15 +61,24 @@ class SupplierController extends Controller
      *
      * @param Request $request
      * @param  int  $id
-     * @return Response
+     * @return Supplier
      */
     public function update(Request $request, $id)
     {
+        /** @var Supplier $supplier */
         $supplier = Supplier::find($id);
 
         $supplier->name = $request->name;
 
         $supplier->save();
+
+        $headquarters = [];
+
+        foreach ($request->headquarters as $headquarter) {
+            $headquarters[] = Headquarter::findOrFail($headquarter)->id;
+        }
+
+        $supplier->headquarters()->sync($headquarters);
 
         return $supplier;
     }
