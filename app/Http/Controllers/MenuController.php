@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Dish;
+use App\Event;
 use App\Http\Resources\Menu as MenuResource;
 use App\Http\Resources\MenuCollection;
 use App\Menu;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 
 class MenuController extends Controller
 {
@@ -34,6 +35,19 @@ class MenuController extends Controller
 
         $menu->save();
 
+        $dishes = [];
+        foreach ($request->dishes as $dish) {
+            $dishes[] = Dish::findOrFail($dish);
+        }
+
+        $events = [];
+        foreach ($request->events as $event) {
+            $events[] = Event::findOrFail($event);
+        }
+
+        $menu->dishes()->saveMany($dishes);
+        $menu->events()->saveMany($events);
+
         return $menu;
     }
 
@@ -53,15 +67,29 @@ class MenuController extends Controller
      *
      * @param Request $request
      * @param  int  $id
-     * @return Response
+     * @return Menu
      */
     public function update(Request $request, $id)
     {
+        /** @var Menu $menu */
         $menu = Menu::find($id);
 
         $menu->name = $request->name;
 
         $menu->save();
+
+        $dishes = [];
+        foreach ($request->dishes as $dish) {
+            $dishes[] = Dish::findOrFail($dish)->id;
+        }
+
+        $events = [];
+        foreach ($request->events as $event) {
+            $events[] = Event::findOrFail($event)->id;
+        }
+
+        $menu->dishes()->sync($dishes);
+        $menu->events()->sync($events);
 
         return $menu;
     }
