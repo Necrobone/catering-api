@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\User as UserResource;
 use App\Http\Resources\UserCollection;
+use App\Role;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -19,7 +20,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        return new UserCollection(User::all());
+        return new UserCollection(User::whereNotIn('role_id', [Role::USER])->get());
     }
 
     /**

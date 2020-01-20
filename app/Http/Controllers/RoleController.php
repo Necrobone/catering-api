@@ -14,6 +14,6 @@ class RoleController extends Controller
      */
     public function index()
     {
-        return Role::all();
+        return Role::whereNotIn('id', [Role::USER])->get();
     }
 }
