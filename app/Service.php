@@ -2,10 +2,24 @@
 
 namespace App;
 
+use DateTime;
+use DateTimeZone;
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 
 class Service extends Model
 {
+    /**
+     * Get the service's start date.
+     *
+     * @return string
+     * @throws Exception
+     */
+    public function getStartDateEuropeAttribute()
+    {
+        return (new DateTime($this->start_date))->setTimezone(new DateTimeZone('Europe/Madrid'))->format('Y-m-d H:i:s');
+    }
+
     /**
      * Get the province that owns the service.
      */

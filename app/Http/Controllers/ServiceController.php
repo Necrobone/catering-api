@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Resources\Service as ServiceResource;
 use App\Http\Resources\ServiceCollection;
 use App\Service;
+use DateTimeImmutable;
+use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 
 class ServiceController extends Controller
 {
@@ -35,17 +36,19 @@ class ServiceController extends Controller
      * Update the specified resource in storage.
      *
      * @param Request $request
-     * @param  int  $id
-     * @return Response
+     * @param int $id
+     * @return Service
+     * @throws Exception
      */
     public function update(Request $request, $id)
     {
+        /** @var Service $service */
         $service = Service::find($id);
 
         $service->address = $request->address;
         $service->zip = $request->zip;
         $service->city = $request->city;
-        $service->start_date = $request->startDate;
+        $service->start_date = new DateTimeImmutable($request->startDate);
         $service->province_id = $request->province;
         $service->event_id = $request->event;
 
@@ -58,11 +61,12 @@ class ServiceController extends Controller
      * Toggle the specified resource in storage.
      *
      * @param Request $request
-     * @param  int  $id
-     * @return Response
+     * @param int $id
+     * @return Service
      */
     public function toggle(Request $request, $id)
     {
+        /** @var Service $service */
         $service = Service::find($id);
 
         $service->approved = $request->approved;
