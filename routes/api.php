@@ -13,9 +13,8 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::post('/login', 'LoginController@login');
+Route::post('/signup', 'UserController@signup');
 
 Route::middleware('auth:api')->group(function () {
     Route::get('/provinces', 'ProvinceController@index');
