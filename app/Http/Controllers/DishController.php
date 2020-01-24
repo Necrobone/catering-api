@@ -69,7 +69,7 @@ class DishController extends Controller
      */
     public function show($id)
     {
-        return new DishResource(Dish::find($id));
+        return new DishResource(Dish::findOrFail($id));
     }
 
     /**
@@ -82,7 +82,7 @@ class DishController extends Controller
     public function update(Request $request, $id)
     {
         /** @var Dish $dish */
-        $dish = Dish::find($id);
+        $dish = Dish::findOrFail($id);
 
         $dish->name = $request->name;
         $dish->description = $request->description;

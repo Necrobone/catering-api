@@ -48,7 +48,7 @@ class HeadquarterController extends Controller
      */
     public function show($id)
     {
-        return new HeadquarterResource(Headquarter::find($id));
+        return new HeadquarterResource(Headquarter::findOrFail($id));
     }
 
     /**
@@ -61,7 +61,7 @@ class HeadquarterController extends Controller
     public function update(Request $request, $id)
     {
         /** @var Headquarter $headquarter */
-        $headquarter = Headquarter::find($id);
+        $headquarter = Headquarter::findOrFail($id);
 
         $headquarter->name = $request->name;
         $headquarter->address = $request->address;

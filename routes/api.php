@@ -28,6 +28,8 @@ Route::middleware('auth:api')->group(function () {
         'employees' => 'UserController',
     ]);
 
+    Route::get('/employees/{employee}/services', 'UserController@services');
+
     Route::apiResource('services', 'ServiceController')->except([
         'store', 'destroy',
     ]);

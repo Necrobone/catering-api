@@ -10,16 +10,16 @@ class Supplier extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  Request  $request
+     * @param Request $request
      * @return array
      */
     public function toArray($request)
     {
         return [
-            "id" => $this->id,
-            "name" => $this->name,
+            "id"           => $this->id,
+            "name"         => $this->name,
             "headquarters" => $this->headquarters,
-            "dishes" => $this->dishes,
+            "dishes"       => $this->dishes,
         ];
     }
 }

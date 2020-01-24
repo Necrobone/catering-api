@@ -53,7 +53,7 @@ class SupplierController extends Controller
      */
     public function show($id)
     {
-        return new SupplierResource(Supplier::find($id));
+        return new SupplierResource(Supplier::findOrFail($id));
     }
 
     /**
@@ -66,7 +66,7 @@ class SupplierController extends Controller
     public function update(Request $request, $id)
     {
         /** @var Supplier $supplier */
-        $supplier = Supplier::find($id);
+        $supplier = Supplier::findOrFail($id);
 
         $supplier->name = $request->name;
 

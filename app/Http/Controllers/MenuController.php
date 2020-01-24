@@ -59,7 +59,7 @@ class MenuController extends Controller
      */
     public function show($id)
     {
-        return new MenuResource(Menu::find($id));
+        return new MenuResource(Menu::findOrFail($id));
     }
 
     /**
@@ -72,7 +72,7 @@ class MenuController extends Controller
     public function update(Request $request, $id)
     {
         /** @var Menu $menu */
-        $menu = Menu::find($id);
+        $menu = Menu::findOrFail($id);
 
         $menu->name = $request->name;
 

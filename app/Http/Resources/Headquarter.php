@@ -10,17 +10,17 @@ class Headquarter extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  Request  $request
+     * @param Request $request
      * @return array
      */
     public function toArray($request)
     {
         return [
-            "id" => $this->id,
-            "name" => $this->name,
-            "address" => $this->address,
-            "zip" => $this->zip,
-            "city" => $this->city,
+            "id"       => $this->id,
+            "name"     => $this->name,
+            "address"  => $this->address,
+            "zip"      => $this->zip,
+            "city"     => $this->city,
             "province" => $this->province,
         ];
     }

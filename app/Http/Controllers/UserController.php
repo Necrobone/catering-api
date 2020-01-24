@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ServiceCollection;
 use App\Http\Resources\User as UserResource;
 use App\Http\Resources\UserCollection;
 use App\Role;
@@ -53,7 +54,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        return new UserResource(User::find($id));
+        return new UserResource(User::findOrFail($id));
     }
 
     /**
@@ -65,7 +66,7 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $user = User::find($id);
+        $user = User::findOrFail($id);
 
         $user->first_name = $request->firstName;
         $user->last_name = $request->lastName;
@@ -90,5 +91,19 @@ class UserController extends Controller
     public function destroy($id)
     {
         return User::destroy($id);
+    }
+
+    /**
+     * Display a listing of the services.
+     *
+     * @param $id
+     * @return ServiceCollection
+     */
+    public function services($id)
+    {
+        /** @var User $user */
+        $user = User::findOrFail($id);
+
+        return new ServiceCollection($user->services);
     }
 }

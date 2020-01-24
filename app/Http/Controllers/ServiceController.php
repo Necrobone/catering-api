@@ -29,7 +29,7 @@ class ServiceController extends Controller
      */
     public function show($id)
     {
-        return new ServiceResource(Service::find($id));
+        return new ServiceResource(Service::findOrFail($id));
     }
 
     /**
@@ -43,7 +43,7 @@ class ServiceController extends Controller
     public function update(Request $request, $id)
     {
         /** @var Service $service */
-        $service = Service::find($id);
+        $service = Service::findOrFail($id);
 
         $service->address = $request->address;
         $service->zip = $request->zip;
@@ -67,7 +67,7 @@ class ServiceController extends Controller
     public function toggle(Request $request, $id)
     {
         /** @var Service $service */
-        $service = Service::find($id);
+        $service = Service::findOrFail($id);
 
         $service->approved = $request->approved;
 

@@ -10,20 +10,20 @@ class Dish extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  Request  $request
+     * @param Request $request
      * @return array
      */
     public function toArray($request)
     {
         return [
-            "id" => $this->id,
-            "name" => $this->name,
+            "id"          => $this->id,
+            "name"        => $this->name,
             "description" => $this->description,
-            "image" => $this->image,
-            "suppliers" => $this->suppliers,
-            "menus" => $this->menus,
-            "events" => $this->events,
-            "services" => $this->services,
+            "image"       => $this->image,
+            "suppliers"   => $this->suppliers,
+            "menus"       => $this->menus,
+            "events"      => $this->events,
+            "services"    => $this->services,
         ];
     }
 }
