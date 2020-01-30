@@ -30,9 +30,7 @@ Route::middleware('auth:api')->group(function () {
 
     Route::get('/employees/{employee}/services', 'UserController@services');
 
-    Route::apiResource('services', 'ServiceController')->except([
-        'store', 'destroy',
-    ]);
+    Route::apiResource('services', 'ServiceController')->except('destroy');
 
     Route::match(['put', 'patch'], '/services/{service}/toggle', 'ServiceController@toggle')->name('toggle');
 });

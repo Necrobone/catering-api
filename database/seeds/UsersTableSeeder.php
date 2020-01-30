@@ -39,7 +39,7 @@ class UsersTableSeeder extends Seeder
             'first_name' => 'Cli',
             'last_name' => 'Ente',
             'email' => 'cliente@gmail.com',
-            'password' => Hash::make('user'),
+            'password' => Hash::make('userclient'),
             'api_token' => Str::random(50),
             'role_id' => Role::USER,
             'created_at' => now()
