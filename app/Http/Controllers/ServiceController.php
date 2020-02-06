@@ -92,6 +92,13 @@ class ServiceController extends Controller
 
         $service->save();
 
+        $dishes = [];
+        foreach ($request->dishes as $dish) {
+            $dishes[] = Dish::findOrFail($dish)->id;
+        }
+
+        $service->dishes()->sync($dishes);
+
         return $service;
     }
 

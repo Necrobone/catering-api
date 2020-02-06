@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 */
 
 Route::post('/login', 'LoginController@login');
-Route::post('/signup', 'UserController@signup');
+Route::post('/signup', 'LoginController@signup');
 
 Route::middleware('auth:api')->group(function () {
     Route::get('/provinces', 'ProvinceController@index');
@@ -33,4 +33,8 @@ Route::middleware('auth:api')->group(function () {
     Route::apiResource('services', 'ServiceController')->except('destroy');
 
     Route::match(['put', 'patch'], '/services/{service}/toggle', 'ServiceController@toggle')->name('toggle');
+});
+
+Route::fallback(function(){
+    return response()->json(['message' => 'Page Not Found.'], 404);
 });
