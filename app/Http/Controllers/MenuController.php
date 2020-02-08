@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Dish;
 use App\Event;
+use App\Http\Requests\PersistMenu;
 use App\Http\Resources\Menu as MenuResource;
 use App\Http\Resources\MenuCollection;
 use App\Menu;
-use Illuminate\Http\Request;
 
 class MenuController extends Controller
 {
@@ -24,10 +24,10 @@ class MenuController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
-     * @return Menu
+     * @param PersistMenu $request
+     * @return MenuResource
      */
-    public function store(Request $request)
+    public function store(PersistMenu $request)
     {
         $menu = new Menu();
 
@@ -48,7 +48,7 @@ class MenuController extends Controller
         $menu->dishes()->saveMany($dishes);
         $menu->events()->saveMany($events);
 
-        return $menu;
+        return new MenuResource($menu);
     }
 
     /**
@@ -65,11 +65,11 @@ class MenuController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
-     * @param  int  $id
-     * @return Menu
+     * @param PersistMenu $request
+     * @param int $id
+     * @return MenuResource
      */
-    public function update(Request $request, $id)
+    public function update(PersistMenu $request, $id)
     {
         /** @var Menu $menu */
         $menu = Menu::findOrFail($id);
@@ -91,7 +91,7 @@ class MenuController extends Controller
         $menu->dishes()->sync($dishes);
         $menu->events()->sync($events);
 
-        return $menu;
+        return new MenuResource($menu);
     }
 
     /**
@@ -102,6 +102,8 @@ class MenuController extends Controller
      */
     public function destroy($id)
     {
+        Menu::findOrFail($id);
+
         return Menu::destroy($id);
     }
 }
