@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Headquarter;
+use App\Http\Requests\PersistSupplier;
 use App\Http\Resources\Supplier as SupplierResource;
 use App\Http\Resources\SupplierCollection;
 use App\Supplier;
-use Illuminate\Http\Request;
 
 class SupplierController extends Controller
 {
@@ -23,10 +23,10 @@ class SupplierController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
-     * @return Supplier
+     * @param PersistSupplier $request
+     * @return SupplierResource
      */
-    public function store(Request $request)
+    public function store(PersistSupplier $request)
     {
         $supplier = new Supplier();
 
@@ -42,7 +42,7 @@ class SupplierController extends Controller
 
         $supplier->headquarters()->saveMany($headquarters);
 
-        return $supplier;
+        return new SupplierResource($supplier);
     }
 
     /**
@@ -59,11 +59,11 @@ class SupplierController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
-     * @param  int  $id
-     * @return Supplier
+     * @param PersistSupplier $request
+     * @param int $id
+     * @return SupplierResource
      */
-    public function update(Request $request, $id)
+    public function update(PersistSupplier $request, $id)
     {
         /** @var Supplier $supplier */
         $supplier = Supplier::findOrFail($id);
@@ -80,7 +80,7 @@ class SupplierController extends Controller
 
         $supplier->headquarters()->sync($headquarters);
 
-        return $supplier;
+        return new SupplierResource($supplier);
     }
 
     /**
@@ -91,6 +91,8 @@ class SupplierController extends Controller
      */
     public function destroy($id)
     {
+        Supplier::findOrFail($id);
+
         return Supplier::destroy($id);
     }
 }
