@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Event;
+use App\Http\Requests\PersistEvent;
 use App\Http\Resources\Event as EventResource;
 use App\Http\Resources\EventCollection;
-use App\Event;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 
 class EventController extends Controller
 {
@@ -23,10 +22,10 @@ class EventController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
-     * @return Event
+     * @param PersistEvent $request
+     * @return EventResource
      */
-    public function store(Request $request)
+    public function store(PersistEvent $request)
     {
         $event = new Event();
 
@@ -34,7 +33,7 @@ class EventController extends Controller
 
         $event->save();
 
-        return $event;
+        return new EventResource($event);
     }
 
     /**
@@ -51,29 +50,32 @@ class EventController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
-     * @param  int  $id
-     * @return Response
+     * @param PersistEvent $request
+     * @param int $id
+     * @return EventResource
      */
-    public function update(Request $request, $id)
+    public function update(PersistEvent $request, $id)
     {
+        /** @var Event $event */
         $event = Event::findOrFail($id);
 
         $event->name = $request->name;
 
         $event->save();
 
-        return $event;
+        return new EventResource($event);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return int
      */
     public function destroy($id)
     {
+        Event::findOrFail($id);
+
         return Event::destroy($id);
     }
 }
