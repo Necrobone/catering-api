@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreEmployee;
+use App\Http\Requests\UpdateEmployee;
 use App\Http\Resources\ServiceCollection;
 use App\Http\Resources\User as UserResource;
 use App\Http\Resources\UserCollection;
 use App\Role;
 use App\User;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
@@ -27,10 +27,10 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
-     * @return User
+     * @param StoreEmployee $request
+     * @return UserResource
      */
-    public function store(Request $request)
+    public function store(StoreEmployee $request)
     {
         $user = new User();
 
@@ -43,7 +43,7 @@ class UserController extends Controller
 
         $user->save();
 
-        return $user;
+        return new UserResource($user);
     }
 
     /**
@@ -60,12 +60,13 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
-     * @param  int  $id
-     * @return Response
+     * @param UpdateEmployee $request
+     * @param int $id
+     * @return UserResource
      */
-    public function update(Request $request, $id)
+    public function update(UpdateEmployee $request, $id)
     {
+        /** @var User $user */
         $user = User::findOrFail($id);
 
         $user->first_name = $request->firstName;
@@ -79,17 +80,19 @@ class UserController extends Controller
 
         $user->save();
 
-        return $user;
+        return new UserResource($user);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return int
      */
     public function destroy($id)
     {
+        User::findOrFail($id);
+
         return User::destroy($id);
     }
 

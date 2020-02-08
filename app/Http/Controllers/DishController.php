@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Dish;
 use App\Event;
+use App\Http\Requests\PersistDish;
 use App\Http\Resources\Dish as DishResource;
 use App\Http\Resources\DishCollection;
 use App\Supplier;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -26,10 +26,10 @@ class DishController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
-     * @return Dish
+     * @param PersistDish $request
+     * @return DishResource
      */
-    public function store(Request $request)
+    public function store(PersistDish $request)
     {
         $dish = new Dish();
 
@@ -58,7 +58,7 @@ class DishController extends Controller
         $dish->suppliers()->saveMany($suppliers);
         $dish->events()->saveMany($events);
 
-        return $dish;
+        return new DishResource($dish);
     }
 
     /**
@@ -75,11 +75,11 @@ class DishController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
+     * @param PersistDish $request
      * @param int $id
-     * @return Dish
+     * @return DishResource
      */
-    public function update(Request $request, $id)
+    public function update(PersistDish $request, $id)
     {
         /** @var Dish $dish */
         $dish = Dish::findOrFail($id);
@@ -87,7 +87,7 @@ class DishController extends Controller
         $dish->name = $request->name;
         $dish->description = $request->description;
         if ($request->image !== $dish->image) {
-            $fileName = Str::random(10) . '.jpg';
+            $fileName = Str::random(10) . $id . '.jpg';
             $image = substr($request->image, strpos($request->image, ',') + 1);
 
             Storage::disk('public')->put($fileName, base64_decode($image));
@@ -110,17 +110,19 @@ class DishController extends Controller
         $dish->suppliers()->sync($suppliers);
         $dish->events()->sync($events);
 
-        return $dish;
+        return new DishResource($dish);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return int
      */
     public function destroy($id)
     {
+        Dish::findOrFail($id);
+
         return Dish::destroy($id);
     }
 }
