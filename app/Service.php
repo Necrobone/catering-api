@@ -3,6 +3,7 @@
 namespace App;
 
 use DateTime;
+use DateTimeInterface;
 use DateTimeZone;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
@@ -17,7 +18,9 @@ class Service extends Model
      */
     public function getStartDateEuropeAttribute()
     {
-        return (new DateTime($this->start_date))->setTimezone(new DateTimeZone('Europe/Madrid'))->format('Y-m-d H:i:s');
+        return $this->start_date instanceof DateTimeInterface
+            ? $this->start_date->setTimezone(new DateTimeZone('Europe/Madrid'))->format('Y-m-d H:i:s')
+            : (new DateTime($this->start_date))->setTimezone(new DateTimeZone('Europe/Madrid'))->format('Y-m-d H:i:s');
     }
 
     /**

@@ -18,9 +18,6 @@ class Event extends JsonResource
         return [
             "id"       => $this->id,
             "name"     => $this->name,
-            "services" => $this->services,
-            "dishes"   => $this->dishes,
-            "menus"    => $this->menu,
         ];
     }
 }

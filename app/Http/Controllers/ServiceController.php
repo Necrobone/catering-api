@@ -3,13 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Dish;
+use App\Http\Requests\StoreService;
+use App\Http\Requests\ToggleService;
+use App\Http\Requests\UpdateService;
 use App\Http\Resources\Service as ServiceResource;
 use App\Http\Resources\ServiceCollection;
 use App\Service;
 use App\User;
 use DateTimeImmutable;
 use Exception;
-use Illuminate\Http\Request;
 
 class ServiceController extends Controller
 {
@@ -26,11 +28,11 @@ class ServiceController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
-     * @return Service
+     * @param StoreService $request
+     * @return ServiceResource
      * @throws Exception
      */
-    public function store(Request $request)
+    public function store(StoreService $request)
     {
         $service = new Service();
 
@@ -56,7 +58,7 @@ class ServiceController extends Controller
         $service->dishes()->saveMany($dishes);
         $service->users()->saveMany($users);
 
-        return $service;
+        return new ServiceResource($service);
     }
 
     /**
@@ -73,12 +75,12 @@ class ServiceController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
+     * @param UpdateService $request
      * @param int $id
-     * @return Service
+     * @return ServiceResource
      * @throws Exception
      */
-    public function update(Request $request, $id)
+    public function update(UpdateService $request, $id)
     {
         /** @var Service $service */
         $service = Service::findOrFail($id);
@@ -97,19 +99,25 @@ class ServiceController extends Controller
             $dishes[] = Dish::findOrFail($dish)->id;
         }
 
-        $service->dishes()->sync($dishes);
+        $users = [];
+        foreach ($request->users as $user) {
+            $users[] = User::findOrFail($user)->id;
+        }
 
-        return $service;
+        $service->dishes()->sync($dishes);
+        $service->users()->sync($dishes);
+
+        return new ServiceResource($service);
     }
 
     /**
      * Toggle the specified resource in storage.
      *
-     * @param Request $request
+     * @param ToggleService $request
      * @param int $id
-     * @return Service
+     * @return ServiceResource
      */
-    public function toggle(Request $request, $id)
+    public function toggle(ToggleService $request, $id)
     {
         /** @var Service $service */
         $service = Service::findOrFail($id);
@@ -118,6 +126,6 @@ class ServiceController extends Controller
 
         $service->save();
 
-        return $service;
+        return new ServiceResource($service);
     }
 }

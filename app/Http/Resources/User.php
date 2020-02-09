@@ -22,7 +22,6 @@ class User extends JsonResource
             "email"     => $this->email,
             "apiToken"  => $this->api_token,
             "role"      => $this->role,
-            "services"  => $this->services,
         ];
     }
 }

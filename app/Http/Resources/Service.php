@@ -25,8 +25,8 @@ class Service extends JsonResource
             "startDate" => $this->start_date_europe,
             "approved"  => $this->approved,
             "province"  => $this->province,
-            "event"     => $this->event,
-            "dishes"    => $this->dishes,
+            "event"     => new Event($this->event),
+            "dishes"    => new DishCollection($this->dishes),
             "users"     => new UserCollection($this->users),
         ];
     }

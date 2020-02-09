@@ -20,10 +20,8 @@ class Dish extends JsonResource
             "name"        => $this->name,
             "description" => $this->description,
             "image"       => $this->image,
-            "suppliers"   => $this->suppliers,
-            "menus"       => $this->menus,
-            "events"      => $this->events,
-            "services"    => $this->services,
+            "suppliers"   => new SupplierCollection($this->suppliers),
+            "events"      => new EventCollection($this->events),
         ];
     }
 }

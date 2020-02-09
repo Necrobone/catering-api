@@ -18,8 +18,7 @@ class Supplier extends JsonResource
         return [
             "id"           => $this->id,
             "name"         => $this->name,
-            "headquarters" => $this->headquarters,
-            "dishes"       => $this->dishes,
+            "headquarters" => new HeadquarterCollection($this->headquarters),
         ];
     }
 }

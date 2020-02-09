@@ -18,8 +18,8 @@ class Menu extends JsonResource
         return [
             "id"     => $this->id,
             "name"   => $this->name,
-            "dishes" => $this->dishes,
-            "events" => $this->events,
+            "dishes" => new DishCollection($this->dishes),
+            "events" => new EventCollection($this->events),
         ];
     }
 }
