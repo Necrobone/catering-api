@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Dish;
 use App\Event;
+use App\Http\Requests\AdminRequest;
 use App\Http\Requests\PersistDish;
 use App\Http\Resources\Dish as DishResource;
 use App\Http\Resources\DishCollection;
@@ -116,10 +117,11 @@ class DishController extends Controller
     /**
      * Remove the specified resource from storage.
      *
+     * @param AdminRequest $request
      * @param int $id
      * @return int
      */
-    public function destroy($id)
+    public function destroy(AdminRequest $request, $id)
     {
         Dish::findOrFail($id);
 

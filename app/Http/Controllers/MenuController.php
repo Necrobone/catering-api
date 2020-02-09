@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Dish;
 use App\Event;
+use App\Http\Requests\AdminRequest;
 use App\Http\Requests\PersistMenu;
 use App\Http\Resources\Menu as MenuResource;
 use App\Http\Resources\MenuCollection;
@@ -97,10 +98,11 @@ class MenuController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param AdminRequest $request
+     * @param int $id
      * @return int
      */
-    public function destroy($id)
+    public function destroy(AdminRequest $request, $id)
     {
         Menu::findOrFail($id);
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Headquarter;
+use App\Http\Requests\AdminRequest;
 use App\Http\Requests\PersistSupplier;
 use App\Http\Resources\Supplier as SupplierResource;
 use App\Http\Resources\SupplierCollection;
@@ -86,10 +87,11 @@ class SupplierController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param AdminRequest $request
+     * @param int $id
      * @return int
      */
-    public function destroy($id)
+    public function destroy(AdminRequest $request, $id)
     {
         Supplier::findOrFail($id);
 

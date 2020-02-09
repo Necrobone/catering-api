@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Event;
+use App\Http\Requests\AdminRequest;
 use App\Http\Requests\PersistEvent;
 use App\Http\Resources\Event as EventResource;
 use App\Http\Resources\EventCollection;
@@ -69,10 +70,11 @@ class EventController extends Controller
     /**
      * Remove the specified resource from storage.
      *
+     * @param AdminRequest $request
      * @param int $id
      * @return int
      */
-    public function destroy($id)
+    public function destroy(AdminRequest $request, $id)
     {
         Event::findOrFail($id);
 

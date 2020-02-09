@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AdminRequest;
 use App\Http\Requests\StoreEmployee;
 use App\Http\Requests\UpdateEmployee;
 use App\Http\Resources\ServiceCollection;
@@ -86,10 +87,11 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
+     * @param AdminRequest $request
      * @param int $id
      * @return int
      */
-    public function destroy($id)
+    public function destroy(AdminRequest $request, $id)
     {
         User::findOrFail($id);
 

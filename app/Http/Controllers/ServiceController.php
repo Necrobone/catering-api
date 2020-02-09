@@ -40,19 +40,19 @@ class ServiceController extends Controller
         $service->zip = $request->zip;
         $service->city = $request->city;
         $service->start_date = new DateTimeImmutable($request->startDate);
-        $service->province_id = $request->province['id'];
-        $service->event_id = $request->event['id'];
+        $service->province_id = $request->province;
+        $service->event_id = $request->event;
 
         $service->save();
 
         $dishes = [];
         foreach ($request->dishes as $dish) {
-            $dishes[] = Dish::findOrFail($dish['id']);
+            $dishes[] = Dish::findOrFail($dish);
         }
 
         $users = [];
         foreach ($request->users as $user) {
-            $users[] = User::findOrFail($user['id']);
+            $users[] = User::findOrFail($user);
         }
 
         $service->dishes()->saveMany($dishes);

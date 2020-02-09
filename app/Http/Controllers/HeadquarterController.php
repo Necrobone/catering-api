@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Headquarter;
+use App\Http\Requests\AdminRequest;
 use App\Http\Requests\PersistHeadquarter;
 use App\Http\Resources\Headquarter as HeadquarterResource;
 use App\Http\Resources\HeadquarterCollection;
-use Illuminate\Http\Request;
 
 class HeadquarterController extends Controller
 {
@@ -62,10 +62,11 @@ class HeadquarterController extends Controller
     /**
      * Remove the specified resource from storage.
      *
+     * @param AdminRequest $request
      * @param int $id
      * @return int
      */
-    public function destroy($id)
+    public function destroy(AdminRequest $request, $id)
     {
         Headquarter::findOrFail($id);
 
@@ -73,11 +74,11 @@ class HeadquarterController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param PersistHeadquarter $request
      * @param Headquarter $headquarter
      * @return HeadquarterResource
      */
-    private function persist(Request $request, Headquarter $headquarter): HeadquarterResource
+    private function persist(PersistHeadquarter $request, Headquarter $headquarter): HeadquarterResource
     {
         $headquarter->name = $request->name;
         $headquarter->address = $request->address;

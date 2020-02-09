@@ -34,7 +34,3 @@ Route::middleware('auth:api')->group(function () {
 
     Route::match(['put', 'patch'], '/services/{service}/toggle', 'ServiceController@toggle')->name('toggle');
 });
-
-Route::fallback(function(){
-    return response()->json(['message' => 'Page Not Found.'], 404);
-});

@@ -20,7 +20,7 @@ class UpdateEmployee extends FormRequest
     {
         /** @var User $user */
         $user = $this->user();
-        return $user->isAdmin();
+        return $user->isAdmin() || $user->isUser();
     }
 
     /**
@@ -62,7 +62,7 @@ class UpdateEmployee extends FormRequest
                 'required',
                 'integer',
                 'exists:App\Role,id',
-                'in:' . Role::EMPLOYEE . ',' . Role::ADMINISTRATOR
+                'in:' . Role::USER . ',' . Role::ADMINISTRATOR
             ],
         ];
     }
