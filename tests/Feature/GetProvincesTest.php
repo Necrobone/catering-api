@@ -11,7 +11,7 @@ class GetProvincesTest extends TestCase
     /**
      * @return void
      */
-    public function testProvincesSuccess()
+    public function testSuccess()
     {
         $user = factory(User::class)->create();
 
@@ -25,7 +25,7 @@ class GetProvincesTest extends TestCase
     /**
      * @return void
      */
-    public function testProvincesFail()
+    public function testFail()
     {
         $response = $this->getJson(route('provinces'));
 

@@ -7,7 +7,7 @@ use App\User;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
-class GetRolesTest extends TestCase
+class GetHeadquartersTest extends TestCase
 {
     /**
      * @return void
@@ -20,11 +20,9 @@ class GetRolesTest extends TestCase
             ]
         );
 
-        $response = $this->getJson(route('roles', ['api_token' => $user->api_token]));
+        $response = $this->getJson(route('headquarters.index', ['api_token' => $user->api_token]));
 
         $response->assertOk();
-
-        $response->assertJsonCount(2);
     }
 
     /**
@@ -38,7 +36,7 @@ class GetRolesTest extends TestCase
             ]
         );
 
-        $response = $this->getJson(route('roles', ['api_token' => $user->api_token]));
+        $response = $this->getJson(route('headquarters.index', ['api_token' => $user->api_token]));
 
         $response->assertStatus(Response::HTTP_FORBIDDEN);
     }
@@ -54,7 +52,7 @@ class GetRolesTest extends TestCase
             ]
         );
 
-        $response = $this->getJson(route('roles', ['api_token' => $user->api_token]));
+        $response = $this->getJson(route('headquarters.index', ['api_token' => $user->api_token]));
 
         $response->assertStatus(Response::HTTP_FORBIDDEN);
     }
@@ -64,7 +62,7 @@ class GetRolesTest extends TestCase
      */
     public function testFail()
     {
-        $response = $this->getJson(route('roles'));
+        $response = $this->getJson(route('headquarters.index'));
 
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
 

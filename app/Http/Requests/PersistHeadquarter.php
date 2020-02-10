@@ -73,8 +73,8 @@ class PersistHeadquarter extends FormRequest
             'address.string'    => 'ADDRESS_INVALID',
             'address.max'       => 'ADDRESS_TOO_LONG',
             'zip.required'      => 'ZIP_REQUIRED',
-            'zip.string'       => 'ZIP_INVALID',
-            'zip.max'          => 'ZIP_TOO_LONG',
+            'zip.string'        => 'ZIP_INVALID',
+            'zip.max'           => 'ZIP_TOO_LONG',
             'city.required'     => 'CITY_REQUIRED',
             'city.string'       => 'CITY_INVALID',
             'city.max'          => 'CITY_TOO_LONG',
@@ -87,7 +87,7 @@ class PersistHeadquarter extends FormRequest
     /**
      * Handle a failed validation attempt.
      *
-     * @param Validator $validator
+     * @param  Validator  $validator
      * @return void
      *
      * @throws APIValidationException

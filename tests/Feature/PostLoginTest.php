@@ -11,7 +11,7 @@ class PostLoginTest extends MigrationTestCase
     /**
      * @return void
      */
-    public function testLoginSuccess()
+    public function testSuccess()
     {
         $response = $this->postJson(route('login'), ['email' => 'admin@gmail.com', 'password' => 'administrator']);
 
@@ -21,7 +21,7 @@ class PostLoginTest extends MigrationTestCase
     /**
      * @return void
      */
-    public function testLoginFail()
+    public function testFail()
     {
         $response = $this->postJson(route('login'), ['email' => 'admin@gmail.com', 'password' => 'fakePassword$2']);
 
@@ -33,7 +33,7 @@ class PostLoginTest extends MigrationTestCase
     /**
      * @return void
      */
-    public function testLoginEmailValidationRequired()
+    public function testEmailValidationRequired()
     {
         $response = $this->postJson(route('login'), ['email' => null, 'password' => 'fakePassword$2']);
 
@@ -45,7 +45,7 @@ class PostLoginTest extends MigrationTestCase
     /**
      * @return void
      */
-    public function testLoginEmailValidationInvalid()
+    public function testEmailValidationInvalid()
     {
         $response = $this->postJson(route('login'), ['email' => 'ImNotAnEmail', 'password' => 'fakePassword$2']);
 
@@ -57,9 +57,12 @@ class PostLoginTest extends MigrationTestCase
     /**
      * @return void
      */
-    public function testLoginEmailValidationTooLong()
+    public function testEmailValidationTooLong()
     {
-        $response = $this->postJson(route('login'), ['email' => 'random@' . Str::random(256), 'password' => 'fakePassword$2']);
+        $response = $this->postJson(
+            route('login'),
+            ['email' => 'random@'.Str::random(256), 'password' => 'fakePassword$2']
+        );
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
 
@@ -69,7 +72,7 @@ class PostLoginTest extends MigrationTestCase
     /**
      * @return void
      */
-    public function testLoginEmailValidationNotFound()
+    public function testEmailValidationNotFound()
     {
         $response = $this->postJson(route('login'), ['email' => 'I@dont.exist', 'password' => 'fakePassword$2']);
 
@@ -81,7 +84,7 @@ class PostLoginTest extends MigrationTestCase
     /**
      * @return void
      */
-    public function testLoginPasswordValidationRequired()
+    public function testPasswordValidationRequired()
     {
         $response = $this->postJson(route('login'), ['email' => 'admin@gmail.com', 'password' => null]);
 
@@ -93,7 +96,7 @@ class PostLoginTest extends MigrationTestCase
     /**
      * @return void
      */
-    public function testLoginPasswordValidationInvalid()
+    public function testPasswordValidationInvalid()
     {
         $response = $this->postJson(route('login'), ['email' => 'admin@gmail.com', 'password' => true]);
 
@@ -105,7 +108,7 @@ class PostLoginTest extends MigrationTestCase
     /**
      * @return void
      */
-    public function testLoginPasswordValidationTooShort()
+    public function testPasswordValidationTooShort()
     {
         $response = $this->postJson(route('login'), ['email' => 'admin@gmail.com', 'password' => 'short']);
 
@@ -117,7 +120,7 @@ class PostLoginTest extends MigrationTestCase
     /**
      * @return void
      */
-    public function testLoginPasswordValidationTooLong()
+    public function testPasswordValidationTooLong()
     {
         $response = $this->postJson(route('login'), ['email' => 'admin@gmail.com', 'password' => Str::random(256)]);
 

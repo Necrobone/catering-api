@@ -13,9 +13,10 @@ class HeadquarterController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param AdminRequest $request
      * @return HeadquarterCollection
      */
-    public function index()
+    public function index(AdminRequest $request)
     {
         return new HeadquarterCollection(Headquarter::all());
     }
@@ -36,10 +37,11 @@ class HeadquarterController extends Controller
     /**
      * Display the specified resource.
      *
+     * @param AdminRequest $request
      * @param int $id
      * @return HeadquarterResource
      */
-    public function show($id)
+    public function show(AdminRequest $request, $id)
     {
         return new HeadquarterResource(Headquarter::findOrFail($id));
     }
