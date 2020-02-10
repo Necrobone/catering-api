@@ -19,9 +19,10 @@ use Illuminate\Database\Eloquent\Factory;
 $factory->define(User::class, function (Faker $faker) {
     return [
         'first_name' => $faker->firstName,
-        'last_name' => $faker->lastName,
-        'email' => $faker->unique()->safeEmail,
-        'password' => $faker->password, // password
-        'api_token' => $faker->md5,
+        'last_name'  => $faker->lastName,
+        'email'      => $faker->unique()->safeEmail,
+        'password'   => $faker->password,
+        'api_token'  => $faker->md5,
+        'role_id'    => $faker->numberBetween(1, 3),
     ];
 });

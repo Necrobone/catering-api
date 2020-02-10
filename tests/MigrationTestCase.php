@@ -4,10 +4,8 @@ namespace Tests;
 
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
-use ProvincesTableSeeder;
-use RolesTableSeeder;
 
-abstract class TestCase extends BaseTestCase
+abstract class MigrationTestCase extends BaseTestCase
 {
     use CreatesApplication, DatabaseMigrations;
 
@@ -15,9 +13,6 @@ abstract class TestCase extends BaseTestCase
     {
         parent::setUp();
 
-        $this->seed([
-            RolesTableSeeder::class,
-            ProvincesTableSeeder::class,
-        ]);
+        $this->seed();
     }
 }
