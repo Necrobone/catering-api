@@ -17,8 +17,8 @@ Route::post('/login', 'LoginController@login')->name('login');
 Route::post('/signup', 'LoginController@signup')->name('signup');
 
 Route::middleware('auth:api')->group(function () {
-    Route::get('/provinces', 'ProvinceController@index');
-    Route::get('/roles', 'RoleController@index');
+    Route::get('/provinces', 'ProvinceController@index')->name('provinces');
+    Route::get('/roles', 'RoleController@index')->name('roles');
     Route::apiResources([
         'headquarters' => 'HeadquarterController',
         'suppliers' => 'SupplierController',
