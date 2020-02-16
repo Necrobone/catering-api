@@ -17,10 +17,10 @@ class User extends JsonResource
     {
         return [
             "id"        => $this->id,
-            "firstName" => $this->first_name,
-            "lastName"  => $this->last_name,
+            "first_name" => $this->first_name,
+            "last_name"  => $this->last_name,
             "email"     => $this->email,
-            "apiToken"  => $this->api_token,
+            "api_token"  => $this->api_token,
             "role"      => $this->role,
         ];
     }

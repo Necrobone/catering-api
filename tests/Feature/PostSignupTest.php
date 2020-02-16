@@ -18,11 +18,11 @@ class PostSignupTest extends TestCase
     {
         parent::setUp();
 
-        $this->user = factory(User::class)->state('user')->make();
+        $this->user = factory(User::class)->make();
 
         $this->user->makeVisible('password');
         $this->user->password = 'Madrid4$';
-        $this->user->password_confirmation = $this->user->password;
+        $this->user->password_confirmation = 'Madrid4$';
     }
 
     /**

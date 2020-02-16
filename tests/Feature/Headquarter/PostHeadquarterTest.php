@@ -48,6 +48,36 @@ class PostHeadquarterTest extends TestCase
     /**
      * @return void
      */
+    public function testEmployeeAuthorizationFail()
+    {
+        $user = factory(User::class)->state('employee')->create();
+        $response = $this->postJson(
+            route('headquarters.store', ['api_token' => $user->api_token]),
+            $this->headquarter->toArray()
+        );
+
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
+        $this->assertDatabaseMissing('headquarters', $this->headquarter->toArray());
+    }
+
+    /**
+     * @return void
+     */
+    public function testUserAuthorizationFail()
+    {
+        $user = factory(User::class)->state('user')->create();
+        $response = $this->postJson(
+            route('headquarters.store', ['api_token' => $user->api_token]),
+            $this->headquarter->toArray()
+        );
+
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
+        $this->assertDatabaseMissing('headquarters', $this->headquarter->toArray());
+    }
+
+    /**
+     * @return void
+     */
     public function testNameValidationRequired()
     {
         $this->headquarter->name = null;

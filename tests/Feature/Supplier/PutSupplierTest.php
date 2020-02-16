@@ -44,16 +44,43 @@ class PutSupplierTest extends TestCase
     public function testSuccess()
     {
         $response = $this->putJson(
-            route(
-                'suppliers.update',
-                ['api_token' => $this->user->api_token, 'supplier' => $this->supplier->id]
-            ),
+            route('suppliers.update', ['api_token' => $this->user->api_token, 'supplier' => $this->supplier->id]),
             $this->updatedSupplier->toArray()
         );
 
         $response->assertOk();
         $this->assertDatabaseMissing('suppliers', ['name' => $this->supplier->name]);
         $this->assertDatabaseHas('suppliers', ['name' => $this->updatedSupplier->name]);
+    }
+
+    /**
+     * @return void
+     */
+    public function testEmployeeAuthorizationFail()
+    {
+        $user = factory(User::class)->state('employee')->create();
+        $response = $this->putJson(
+            route('suppliers.update', ['api_token' => $user->api_token, 'supplier' => $this->supplier->id]),
+            $this->updatedSupplier->toArray()
+        );
+
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
+        $this->assertDatabaseHas('suppliers', ['name' => $this->supplier->name]);
+    }
+
+    /**
+     * @return void
+     */
+    public function testUserAuthorizationFail()
+    {
+        $user = factory(User::class)->state('user')->create();
+        $response = $this->putJson(
+            route('suppliers.update', ['api_token' => $user->api_token, 'supplier' => $this->supplier->id]),
+            $this->updatedSupplier->toArray()
+        );
+
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
+        $this->assertDatabaseHas('suppliers', ['name' => $this->supplier->name]);
     }
 
     /**

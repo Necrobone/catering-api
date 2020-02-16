@@ -55,8 +55,24 @@ class User extends Authenticatable
     /**
      * @return bool
      */
+    public function isEmployee()
+    {
+        return $this->role->id === Role::EMPLOYEE;
+    }
+
+    /**
+     * @return bool
+     */
     public function isUser()
     {
         return $this->role->id === Role::USER;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isNotUser()
+    {
+        return $this->role->id !== Role::USER;
     }
 }

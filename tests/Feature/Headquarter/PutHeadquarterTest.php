@@ -55,6 +55,42 @@ class PutHeadquarterTest extends TestCase
     /**
      * @return void
      */
+    public function testEmployeeAuthorizationFail()
+    {
+        $user = factory(User::class)->state('employee')->create();
+        $response = $this->putJson(
+            route(
+                'headquarters.update',
+                ['api_token' => $user->api_token, 'headquarters' => $this->headquarter->id]
+            ),
+            $this->updatedHeadquarter->toArray()
+        );
+
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
+        $this->assertDatabaseHas('headquarters', $this->headquarter->toArray());
+    }
+
+    /**
+     * @return void
+     */
+    public function testUserAuthorizationFail()
+    {
+        $user = factory(User::class)->state('user')->create();
+        $response = $this->putJson(
+            route(
+                'headquarters.update',
+                ['api_token' => $user->api_token, 'headquarters' => $this->headquarter->id]
+            ),
+            $this->updatedHeadquarter->toArray()
+        );
+
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
+        $this->assertDatabaseHas('headquarters', $this->headquarter->toArray());
+    }
+
+    /**
+     * @return void
+     */
     public function testNameValidationRequired()
     {
         $this->updatedHeadquarter->name = null;

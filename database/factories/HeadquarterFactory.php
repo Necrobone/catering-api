@@ -13,6 +13,6 @@ $factory->define(Headquarter::class, function (Faker $faker) {
         'address'     => $faker->streetAddress,
         'zip'         => $faker->postcode,
         'city'        => $faker->city,
-        'province_id' => factory(Province::class),
+        'province_id' => Province::first(),
     ];
 });

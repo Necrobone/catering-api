@@ -49,6 +49,36 @@ class PostSupplierTest extends TestCase
     /**
      * @return void
      */
+    public function testEmployeeAuthorizationFail()
+    {
+        $user = factory(User::class)->state('employee')->create();
+        $response = $this->postJson(
+            route('suppliers.store', ['api_token' => $user->api_token]),
+            $this->supplier->toArray()
+        );
+
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
+        $this->assertDatabaseMissing('suppliers', ['name' => $this->supplier->name]);
+    }
+
+    /**
+     * @return void
+     */
+    public function testUserAuthorizationFail()
+    {
+        $user = factory(User::class)->state('user')->create();
+        $response = $this->postJson(
+            route('suppliers.store', ['api_token' => $user->api_token]),
+            $this->supplier->toArray()
+        );
+
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
+        $this->assertDatabaseMissing('suppliers', ['name' => $this->supplier->name]);
+    }
+
+    /**
+     * @return void
+     */
     public function testNameValidationRequired()
     {
         $this->supplier->name = null;

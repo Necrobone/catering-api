@@ -2,12 +2,11 @@
 
 namespace Tests\Feature;
 
-use App\Supplier;
 use App\User;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
-class GetSupplierTest extends TestCase
+class GetEmployeeTest extends TestCase
 {
     /**
      * @return void
@@ -15,10 +14,23 @@ class GetSupplierTest extends TestCase
     public function testSuccess()
     {
         $user = factory(User::class)->state('administrator')->create();
-        $supplier = factory(Supplier::class)->create();
 
         $response = $this->getJson(
-            route('suppliers.show', ['api_token' => $user->api_token, 'supplier' => $supplier->id])
+            route('employees.show', ['api_token' => $user->api_token, 'employee' => $user->id])
+        );
+
+        $response->assertOk();
+    }
+
+    /**
+     * @return void
+     */
+    public function testProfileSuccess()
+    {
+        $user = factory(User::class)->state('user')->create();
+
+        $response = $this->getJson(
+            route('employees.show', ['api_token' => $user->api_token, 'employee' => $user->id])
         );
 
         $response->assertOk();
@@ -30,10 +42,9 @@ class GetSupplierTest extends TestCase
     public function testEmployeeAuthorizationFail()
     {
         $user = factory(User::class)->state('employee')->create();
-        $supplier = factory(Supplier::class)->create();
 
         $response = $this->getJson(
-            route('suppliers.show', ['api_token' => $user->api_token, 'supplier' => $supplier->id])
+            route('employees.show', ['api_token' => $user->api_token, 'employee' => $user->id])
         );
 
         $response->assertStatus(Response::HTTP_FORBIDDEN);
@@ -45,10 +56,10 @@ class GetSupplierTest extends TestCase
     public function testUserAuthorizationFail()
     {
         $user = factory(User::class)->state('user')->create();
-        $supplier = factory(Supplier::class)->create();
+        $employee = factory(User::class)->state('employee')->create();
 
         $response = $this->getJson(
-            route('suppliers.show', ['api_token' => $user->api_token, 'supplier' => $supplier->id])
+            route('employees.show', ['api_token' => $user->api_token, 'employee' => $employee->id])
         );
 
         $response->assertStatus(Response::HTTP_FORBIDDEN);
@@ -61,10 +72,10 @@ class GetSupplierTest extends TestCase
     {
         $user = factory(User::class)->state('administrator')->create();
 
-        $response = $this->getJson(route('suppliers.show', ['api_token' => $user->api_token, 'supplier' => 0]));
+        $response = $this->getJson(route('employees.show', ['api_token' => $user->api_token, 'employee' => 0]));
 
         $response->assertNotFound();
-        $response->assertJsonPath('message', 'No query results for model [App\Supplier] 0');
+        $response->assertJsonPath('message', 'No query results for model [App\User] 0');
     }
 
     /**
@@ -72,7 +83,7 @@ class GetSupplierTest extends TestCase
      */
     public function testFail()
     {
-        $response = $this->getJson(route('suppliers.show', ['supplier' => 0]));
+        $response = $this->getJson(route('employees.show', ['employee' => 0]));
 
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
         $response->assertJsonPath('message', 'Unauthenticated.');

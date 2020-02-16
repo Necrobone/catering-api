@@ -24,24 +24,10 @@ $factory->define(User::class, function (Faker $faker) {
         'email'      => $faker->unique()->safeEmail,
         'password'   => $faker->password,
         'api_token'  => $faker->md5,
-        'role_id'    => factory(Role::class)
+        'role_id'    => $faker->numberBetween(Role::ADMINISTRATOR, Role::USER)
     ];
 });
 
-$factory->state(User::class, 'administrator', [
-    'role_id' => function () {
-        return factory(Role::class)->state('administrator')->create()->id;
-    }
-]);
-
-$factory->state(User::class, 'employee', [
-    'role_id' => function () {
-        return factory(Role::class)->state('employee')->create()->id;
-    }
-]);
-
-$factory->state(User::class, 'user', [
-    'role_id' => function () {
-        return factory(Role::class)->state('user')->create()->id;
-    }
-]);
+$factory->state(User::class, 'administrator', ['role_id' => Role::ADMINISTRATOR]);
+$factory->state(User::class, 'employee', ['role_id' => Role::EMPLOYEE]);
+$factory->state(User::class, 'user', ['role_id' => Role::USER]);

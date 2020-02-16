@@ -19,9 +19,7 @@ class PostLoginTest extends TestCase
     {
         parent::setUp();
 
-        $this->user = factory(User::class)->create([
-            'password' => Hash::make('Madrid4$')
-        ]);
+        $this->user = factory(User::class)->create(['password' => Hash::make('Madrid4$')]);
         $this->user->plainPassword = 'Madrid4$';
     }
 
@@ -30,7 +28,10 @@ class PostLoginTest extends TestCase
      */
     public function testSuccess()
     {
-        $response = $this->postJson(route('login'), ['email' => $this->user->email, 'password' => $this->user->plainPassword]);
+        $response = $this->postJson(
+            route('login'),
+            ['email' => $this->user->email, 'password' => $this->user->plainPassword]
+        );
 
         $response->assertOk();
     }
@@ -62,7 +63,10 @@ class PostLoginTest extends TestCase
      */
     public function testEmailValidationInvalid()
     {
-        $response = $this->postJson(route('login'), ['email' => 'ImNotAnEmail', 'password' => $this->user->plainPassword]);
+        $response = $this->postJson(
+            route('login'),
+            ['email' => 'ImNotAnEmail', 'password' => $this->user->plainPassword]
+        );
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $response->assertJsonPath('error', 'EMAIL_INVALID');
@@ -75,7 +79,7 @@ class PostLoginTest extends TestCase
     {
         $response = $this->postJson(
             route('login'),
-            ['email' => 'random@'.Str::random(256), 'password' => $this->user->plainPassword]
+            ['email' => 'random@' . Str::random(256), 'password' => $this->user->plainPassword]
         );
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
@@ -87,7 +91,10 @@ class PostLoginTest extends TestCase
      */
     public function testEmailValidationNotFound()
     {
-        $response = $this->postJson(route('login'), ['email' => 'I@dont.exist', 'password' => $this->user->plainPassword]);
+        $response = $this->postJson(
+            route('login'),
+            ['email' => 'I@dont.exist', 'password' => $this->user->plainPassword]
+        );
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $response->assertJsonPath('error', 'EMAIL_NOT_FOUND');

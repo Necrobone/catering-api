@@ -15,12 +15,11 @@ class GetProvincesTest extends TestCase
     public function testSuccess()
     {
         $user = factory(User::class)->create();
-        factory(Province::class, 40)->create();
 
         $response = $this->getJson(route('provinces', ['api_token' => $user->api_token]));
 
         $response->assertOk();
-        $response->assertJsonCount(40);
+        $response->assertJsonCount(52);
     }
 
     /**
