@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Event;
 use App\Http\Requests\AdminRequest;
+use App\Http\Requests\GetEvents;
 use App\Http\Requests\PersistEvent;
 use App\Http\Resources\Event as EventResource;
 use App\Http\Resources\EventCollection;
@@ -13,9 +14,10 @@ class EventController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param GetEvents $request
      * @return EventCollection
      */
-    public function index()
+    public function index(GetEvents $request)
     {
         return new EventCollection(Event::all());
     }
@@ -40,10 +42,11 @@ class EventController extends Controller
     /**
      * Display the specified resource.
      *
+     * @param AdminRequest $request
      * @param int $id
      * @return EventResource
      */
-    public function show($id)
+    public function show(AdminRequest $request, $id)
     {
         return new EventResource(Event::findOrFail($id));
     }
