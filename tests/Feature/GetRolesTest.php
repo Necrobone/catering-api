@@ -14,16 +14,13 @@ class GetRolesTest extends TestCase
      */
     public function testSuccess()
     {
-        $user = factory(User::class)->create(
-            [
-                'role_id' => Role::ADMINISTRATOR
-            ]
-        );
+        $user = factory(User::class)->state('administrator')->create();
+        factory(Role::class)->state('employee')->create();
+        factory(Role::class)->state('user')->create();
 
         $response = $this->getJson(route('roles', ['api_token' => $user->api_token]));
 
         $response->assertOk();
-
         $response->assertJsonCount(2);
     }
 
@@ -32,11 +29,7 @@ class GetRolesTest extends TestCase
      */
     public function testEmployeeAuthorizationFail()
     {
-        $user = factory(User::class)->create(
-            [
-                'role_id' => Role::EMPLOYEE
-            ]
-        );
+        $user = factory(User::class)->state('employee')->create();
 
         $response = $this->getJson(route('roles', ['api_token' => $user->api_token]));
 
@@ -48,11 +41,7 @@ class GetRolesTest extends TestCase
      */
     public function testUserAuthorizationFail()
     {
-        $user = factory(User::class)->create(
-            [
-                'role_id' => Role::USER
-            ]
-        );
+        $user = factory(User::class)->state('user')->create();
 
         $response = $this->getJson(route('roles', ['api_token' => $user->api_token]));
 
@@ -67,7 +56,6 @@ class GetRolesTest extends TestCase
         $response = $this->getJson(route('roles'));
 
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
-
         $response->assertJsonPath('message', 'Unauthenticated.');
     }
 }

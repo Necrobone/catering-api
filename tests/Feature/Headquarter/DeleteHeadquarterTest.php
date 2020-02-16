@@ -3,8 +3,6 @@
 namespace Tests\Feature;
 
 use App\Headquarter;
-use App\Province;
-use App\Role;
 use App\User;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
@@ -16,23 +14,15 @@ class DeleteHeadquarterTest extends TestCase
      */
     public function testSuccess()
     {
-        $user = factory(User::class)->create(
-            [
-                'role_id' => Role::ADMINISTRATOR
-            ]
-        );
+        $user = factory(User::class)->state('administrator')->create();
+        $headquarter = factory(Headquarter::class)->create();
 
-        $headquarter = factory(Headquarter::class)->create(
-            [
-                'province_id' => Province::first()
-            ]
-        );
-
-        $response = $this->getJson(
+        $response = $this->deleteJson(
             route('headquarters.destroy', ['api_token' => $user->api_token, 'headquarters' => $headquarter->id])
         );
 
         $response->assertOk();
+        $this->assertSoftDeleted('headquarters', $headquarter->toArray());
     }
 
     /**
@@ -40,23 +30,15 @@ class DeleteHeadquarterTest extends TestCase
      */
     public function testEmployeeAuthorizationFail()
     {
-        $user = factory(User::class)->create(
-            [
-                'role_id' => Role::EMPLOYEE
-            ]
-        );
+        $user = factory(User::class)->state('employee')->create();
+        $headquarter = factory(Headquarter::class)->create();
 
-        $headquarter = factory(Headquarter::class)->create(
-            [
-                'province_id' => Province::first()
-            ]
-        );
-
-        $response = $this->getJson(
+        $response = $this->deleteJson(
             route('headquarters.destroy', ['api_token' => $user->api_token, 'headquarters' => $headquarter->id])
         );
 
         $response->assertStatus(Response::HTTP_FORBIDDEN);
+        $this->assertDatabaseHas('headquarters', $headquarter->toArray());
     }
 
     /**
@@ -64,23 +46,15 @@ class DeleteHeadquarterTest extends TestCase
      */
     public function testUserAuthorizationFail()
     {
-        $user = factory(User::class)->create(
-            [
-                'role_id' => Role::USER
-            ]
-        );
+        $user = factory(User::class)->state('user')->create();
+        $headquarter = factory(Headquarter::class)->create();
 
-        $headquarter = factory(Headquarter::class)->create(
-            [
-                'province_id' => Province::first()
-            ]
-        );
-
-        $response = $this->getJson(
+        $response = $this->deleteJson(
             route('headquarters.destroy', ['api_token' => $user->api_token, 'headquarters' => $headquarter->id])
         );
 
         $response->assertStatus(Response::HTTP_FORBIDDEN);
+        $this->assertDatabaseHas('headquarters', $headquarter->toArray());
     }
 
     /**
@@ -88,18 +62,13 @@ class DeleteHeadquarterTest extends TestCase
      */
     public function testNotFound()
     {
-        $user = factory(User::class)->create(
-            [
-                'role_id' => Role::ADMINISTRATOR
-            ]
-        );
+        $user = factory(User::class)->state('administrator')->create();
 
-        $response = $this->getJson(
+        $response = $this->deleteJson(
             route('headquarters.destroy', ['api_token' => $user->api_token, 'headquarters' => 0])
         );
 
         $response->assertNotFound();
-
         $response->assertJsonPath('message', 'No query results for model [App\Headquarter] 0');
     }
 
@@ -108,10 +77,9 @@ class DeleteHeadquarterTest extends TestCase
      */
     public function testFail()
     {
-        $response = $this->getJson(route('headquarters.destroy', ['headquarters' => 0]));
+        $response = $this->deleteJson(route('headquarters.destroy', ['headquarters' => 0]));
 
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
-
         $response->assertJsonPath('message', 'Unauthenticated.');
     }
 }

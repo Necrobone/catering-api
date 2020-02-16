@@ -3,8 +3,6 @@
 namespace Tests\Feature;
 
 use App\Headquarter;
-use App\Province;
-use App\Role;
 use App\User;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
@@ -16,17 +14,8 @@ class GetHeadquarterTest extends TestCase
      */
     public function testSuccess()
     {
-        $user = factory(User::class)->create(
-            [
-                'role_id' => Role::ADMINISTRATOR
-            ]
-        );
-
-        $headquarter = factory(Headquarter::class)->create(
-            [
-                'province_id' => Province::first()
-            ]
-        );
+        $user = factory(User::class)->state('administrator')->create();
+        $headquarter = factory(Headquarter::class)->create();
 
         $response = $this->getJson(
             route('headquarters.show', ['api_token' => $user->api_token, 'headquarters' => $headquarter->id])
@@ -40,17 +29,8 @@ class GetHeadquarterTest extends TestCase
      */
     public function testEmployeeAuthorizationFail()
     {
-        $user = factory(User::class)->create(
-            [
-                'role_id' => Role::EMPLOYEE
-            ]
-        );
-
-        $headquarter = factory(Headquarter::class)->create(
-            [
-                'province_id' => Province::first()
-            ]
-        );
+        $user = factory(User::class)->state('employee')->create();
+        $headquarter = factory(Headquarter::class)->create();
 
         $response = $this->getJson(
             route('headquarters.show', ['api_token' => $user->api_token, 'headquarters' => $headquarter->id])
@@ -64,17 +44,8 @@ class GetHeadquarterTest extends TestCase
      */
     public function testUserAuthorizationFail()
     {
-        $user = factory(User::class)->create(
-            [
-                'role_id' => Role::USER
-            ]
-        );
-
-        $headquarter = factory(Headquarter::class)->create(
-            [
-                'province_id' => Province::first()
-            ]
-        );
+        $user = factory(User::class)->state('user')->create();
+        $headquarter = factory(Headquarter::class)->create();
 
         $response = $this->getJson(
             route('headquarters.show', ['api_token' => $user->api_token, 'headquarters' => $headquarter->id])
@@ -88,16 +59,11 @@ class GetHeadquarterTest extends TestCase
      */
     public function testNotFound()
     {
-        $user = factory(User::class)->create(
-            [
-                'role_id' => Role::ADMINISTRATOR
-            ]
-        );
+        $user = factory(User::class)->state('administrator')->create();
 
         $response = $this->getJson(route('headquarters.show', ['api_token' => $user->api_token, 'headquarters' => 0]));
 
         $response->assertNotFound();
-
         $response->assertJsonPath('message', 'No query results for model [App\Headquarter] 0');
     }
 
@@ -109,7 +75,6 @@ class GetHeadquarterTest extends TestCase
         $response = $this->getJson(route('headquarters.show', ['headquarters' => 0]));
 
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
-
         $response->assertJsonPath('message', 'Unauthenticated.');
     }
 }

@@ -3,8 +3,6 @@
 namespace Tests\Feature;
 
 use App\Headquarter;
-use App\Province;
-use App\Role;
 use App\User;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,23 +29,10 @@ class PutHeadquarterTest extends TestCase
     {
         parent::setUp();
 
-        $this->headquarter = factory(Headquarter::class)->create(
-            [
-                'province_id' => Province::first()
-            ]
-        );
-
-        $this->updatedHeadquarter = factory(Headquarter::class)->make(
-            [
-                'province' => Province::first(),
-            ]
-        );
-
-        $this->user = factory(User::class)->create(
-            [
-                'role_id' => Role::ADMINISTRATOR,
-            ]
-        );
+        $this->headquarter = factory(Headquarter::class)->create();
+        $this->updatedHeadquarter = factory(Headquarter::class)->make();
+        $this->updatedHeadquarter->province = $this->updatedHeadquarter->province_id;
+        $this->user = factory(User::class)->state('administrator')->create();
     }
 
     /**
@@ -64,17 +49,7 @@ class PutHeadquarterTest extends TestCase
         );
 
         $response->assertOk();
-
-        $this->assertDatabaseMissing(
-            'headquarters',
-            [
-                'name'        => $this->headquarter->name,
-                'address'     => $this->headquarter->address,
-                'zip'         => $this->headquarter->zip,
-                'city'        => $this->headquarter->city,
-                'province_id' => $this->headquarter->province_id,
-            ]
-        );
+        $this->assertDatabaseMissing('headquarters', $this->headquarter->toArray());
     }
 
     /**
@@ -93,19 +68,8 @@ class PutHeadquarterTest extends TestCase
         );
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-
         $response->assertJsonPath('error', 'NAME_REQUIRED');
-
-        $this->assertDatabaseHas(
-            'headquarters',
-            [
-                'name'        => $this->headquarter->name,
-                'address'     => $this->headquarter->address,
-                'zip'         => $this->headquarter->zip,
-                'city'        => $this->headquarter->city,
-                'province_id' => $this->headquarter->province_id,
-            ]
-        );
+        $this->assertDatabaseHas('headquarters', $this->headquarter->toArray());
     }
 
     /**
@@ -124,19 +88,8 @@ class PutHeadquarterTest extends TestCase
         );
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-
         $response->assertJsonPath('error', 'NAME_INVALID');
-
-        $this->assertDatabaseHas(
-            'headquarters',
-            [
-                'name'        => $this->headquarter->name,
-                'address'     => $this->headquarter->address,
-                'zip'         => $this->headquarter->zip,
-                'city'        => $this->headquarter->city,
-                'province_id' => $this->headquarter->province_id,
-            ]
-        );
+        $this->assertDatabaseHas('headquarters', $this->headquarter->toArray());
     }
 
     /**
@@ -155,19 +108,8 @@ class PutHeadquarterTest extends TestCase
         );
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-
         $response->assertJsonPath('error', 'NAME_TOO_LONG');
-
-        $this->assertDatabaseHas(
-            'headquarters',
-            [
-                'name'        => $this->headquarter->name,
-                'address'     => $this->headquarter->address,
-                'zip'         => $this->headquarter->zip,
-                'city'        => $this->headquarter->city,
-                'province_id' => $this->headquarter->province_id,
-            ]
-        );
+        $this->assertDatabaseHas('headquarters', $this->headquarter->toArray());
     }
 
     /**
@@ -186,19 +128,8 @@ class PutHeadquarterTest extends TestCase
         );
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-
         $response->assertJsonPath('error', 'ADDRESS_REQUIRED');
-
-        $this->assertDatabaseHas(
-            'headquarters',
-            [
-                'name'        => $this->headquarter->name,
-                'address'     => $this->headquarter->address,
-                'zip'         => $this->headquarter->zip,
-                'city'        => $this->headquarter->city,
-                'province_id' => $this->headquarter->province_id,
-            ]
-        );
+        $this->assertDatabaseHas('headquarters', $this->headquarter->toArray());
     }
 
     /**
@@ -217,19 +148,8 @@ class PutHeadquarterTest extends TestCase
         );
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-
         $response->assertJsonPath('error', 'ADDRESS_INVALID');
-
-        $this->assertDatabaseHas(
-            'headquarters',
-            [
-                'name'        => $this->headquarter->name,
-                'address'     => $this->headquarter->address,
-                'zip'         => $this->headquarter->zip,
-                'city'        => $this->headquarter->city,
-                'province_id' => $this->headquarter->province_id,
-            ]
-        );
+        $this->assertDatabaseHas('headquarters', $this->headquarter->toArray());
     }
 
     /**
@@ -248,19 +168,8 @@ class PutHeadquarterTest extends TestCase
         );
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-
         $response->assertJsonPath('error', 'ADDRESS_TOO_LONG');
-
-        $this->assertDatabaseHas(
-            'headquarters',
-            [
-                'name'        => $this->headquarter->name,
-                'address'     => $this->headquarter->address,
-                'zip'         => $this->headquarter->zip,
-                'city'        => $this->headquarter->city,
-                'province_id' => $this->headquarter->province_id,
-            ]
-        );
+        $this->assertDatabaseHas('headquarters', $this->headquarter->toArray());
     }
 
     /**
@@ -279,19 +188,8 @@ class PutHeadquarterTest extends TestCase
         );
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-
         $response->assertJsonPath('error', 'ZIP_REQUIRED');
-
-        $this->assertDatabaseHas(
-            'headquarters',
-            [
-                'name'        => $this->headquarter->name,
-                'address'     => $this->headquarter->address,
-                'zip'         => $this->headquarter->zip,
-                'city'        => $this->headquarter->city,
-                'province_id' => $this->headquarter->province_id,
-            ]
-        );
+        $this->assertDatabaseHas('headquarters', $this->headquarter->toArray());
     }
 
     /**
@@ -310,19 +208,8 @@ class PutHeadquarterTest extends TestCase
         );
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-
         $response->assertJsonPath('error', 'ZIP_INVALID');
-
-        $this->assertDatabaseHas(
-            'headquarters',
-            [
-                'name'        => $this->headquarter->name,
-                'address'     => $this->headquarter->address,
-                'zip'         => $this->headquarter->zip,
-                'city'        => $this->headquarter->city,
-                'province_id' => $this->headquarter->province_id,
-            ]
-        );
+        $this->assertDatabaseHas('headquarters', $this->headquarter->toArray());
     }
 
     /**
@@ -341,19 +228,8 @@ class PutHeadquarterTest extends TestCase
         );
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-
         $response->assertJsonPath('error', 'ZIP_TOO_LONG');
-
-        $this->assertDatabaseHas(
-            'headquarters',
-            [
-                'name'        => $this->headquarter->name,
-                'address'     => $this->headquarter->address,
-                'zip'         => $this->headquarter->zip,
-                'city'        => $this->headquarter->city,
-                'province_id' => $this->headquarter->province_id,
-            ]
-        );
+        $this->assertDatabaseHas('headquarters', $this->headquarter->toArray());
     }
 
     /**
@@ -372,19 +248,8 @@ class PutHeadquarterTest extends TestCase
         );
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-
         $response->assertJsonPath('error', 'CITY_REQUIRED');
-
-        $this->assertDatabaseHas(
-            'headquarters',
-            [
-                'name'        => $this->headquarter->name,
-                'address'     => $this->headquarter->address,
-                'zip'         => $this->headquarter->zip,
-                'city'        => $this->headquarter->city,
-                'province_id' => $this->headquarter->province_id,
-            ]
-        );
+        $this->assertDatabaseHas('headquarters', $this->headquarter->toArray());
     }
 
     /**
@@ -403,19 +268,8 @@ class PutHeadquarterTest extends TestCase
         );
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-
         $response->assertJsonPath('error', 'CITY_INVALID');
-
-        $this->assertDatabaseHas(
-            'headquarters',
-            [
-                'name'        => $this->headquarter->name,
-                'address'     => $this->headquarter->address,
-                'zip'         => $this->headquarter->zip,
-                'city'        => $this->headquarter->city,
-                'province_id' => $this->headquarter->province_id,
-            ]
-        );
+        $this->assertDatabaseHas('headquarters', $this->headquarter->toArray());
     }
 
     /**
@@ -434,19 +288,8 @@ class PutHeadquarterTest extends TestCase
         );
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-
         $response->assertJsonPath('error', 'CITY_TOO_LONG');
-
-        $this->assertDatabaseHas(
-            'headquarters',
-            [
-                'name'        => $this->headquarter->name,
-                'address'     => $this->headquarter->address,
-                'zip'         => $this->headquarter->zip,
-                'city'        => $this->headquarter->city,
-                'province_id' => $this->headquarter->province_id,
-            ]
-        );
+        $this->assertDatabaseHas('headquarters', $this->headquarter->toArray());
     }
 
     /**
@@ -465,19 +308,8 @@ class PutHeadquarterTest extends TestCase
         );
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-
         $response->assertJsonPath('error', 'PROVINCE_REQUIRED');
-
-        $this->assertDatabaseHas(
-            'headquarters',
-            [
-                'name'        => $this->headquarter->name,
-                'address'     => $this->headquarter->address,
-                'zip'         => $this->headquarter->zip,
-                'city'        => $this->headquarter->city,
-                'province_id' => $this->headquarter->province_id,
-            ]
-        );
+        $this->assertDatabaseHas('headquarters', $this->headquarter->toArray());
     }
 
     /**
@@ -496,19 +328,8 @@ class PutHeadquarterTest extends TestCase
         );
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-
         $response->assertJsonPath('error', 'PROVINCE_INVALID');
-
-        $this->assertDatabaseHas(
-            'headquarters',
-            [
-                'name'        => $this->headquarter->name,
-                'address'     => $this->headquarter->address,
-                'zip'         => $this->headquarter->zip,
-                'city'        => $this->headquarter->city,
-                'province_id' => $this->headquarter->province_id,
-            ]
-        );
+        $this->assertDatabaseHas('headquarters', $this->headquarter->toArray());
     }
 
     /**
@@ -527,18 +348,7 @@ class PutHeadquarterTest extends TestCase
         );
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-
         $response->assertJsonPath('error', 'PROVINCE_NOT_FOUND');
-
-        $this->assertDatabaseHas(
-            'headquarters',
-            [
-                'name'        => $this->headquarter->name,
-                'address'     => $this->headquarter->address,
-                'zip'         => $this->headquarter->zip,
-                'city'        => $this->headquarter->city,
-                'province_id' => $this->headquarter->province_id,
-            ]
-        );
+        $this->assertDatabaseHas('headquarters', $this->headquarter->toArray());
     }
 }

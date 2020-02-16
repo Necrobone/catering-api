@@ -2,18 +2,35 @@
 
 namespace Tests\Feature;
 
+use App\User;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
-use Tests\MigrationTestCase;
+use Tests\TestCase;
 
-class PostLoginTest extends MigrationTestCase
+class PostLoginTest extends TestCase
 {
+    /**
+     * @var User
+     */
+    private $user;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->user = factory(User::class)->create([
+            'password' => Hash::make('Madrid4$')
+        ]);
+        $this->user->plainPassword = 'Madrid4$';
+    }
+
     /**
      * @return void
      */
     public function testSuccess()
     {
-        $response = $this->postJson(route('login'), ['email' => 'admin@gmail.com', 'password' => 'administrator']);
+        $response = $this->postJson(route('login'), ['email' => $this->user->email, 'password' => $this->user->plainPassword]);
 
         $response->assertOk();
     }
@@ -23,10 +40,9 @@ class PostLoginTest extends MigrationTestCase
      */
     public function testFail()
     {
-        $response = $this->postJson(route('login'), ['email' => 'admin@gmail.com', 'password' => 'fakePassword$2']);
+        $response = $this->postJson(route('login'), ['email' => $this->user->email, 'password' => 'fakePassword$2']);
 
         $response->assertForbidden();
-
         $response->assertJsonPath('error', 'LOGIN_ERROR');
     }
 
@@ -35,10 +51,9 @@ class PostLoginTest extends MigrationTestCase
      */
     public function testEmailValidationRequired()
     {
-        $response = $this->postJson(route('login'), ['email' => null, 'password' => 'fakePassword$2']);
+        $response = $this->postJson(route('login'), ['email' => null, 'password' => $this->user->plainPassword]);
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-
         $response->assertJsonPath('error', 'EMAIL_REQUIRED');
     }
 
@@ -47,10 +62,9 @@ class PostLoginTest extends MigrationTestCase
      */
     public function testEmailValidationInvalid()
     {
-        $response = $this->postJson(route('login'), ['email' => 'ImNotAnEmail', 'password' => 'fakePassword$2']);
+        $response = $this->postJson(route('login'), ['email' => 'ImNotAnEmail', 'password' => $this->user->plainPassword]);
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-
         $response->assertJsonPath('error', 'EMAIL_INVALID');
     }
 
@@ -61,11 +75,10 @@ class PostLoginTest extends MigrationTestCase
     {
         $response = $this->postJson(
             route('login'),
-            ['email' => 'random@'.Str::random(256), 'password' => 'fakePassword$2']
+            ['email' => 'random@'.Str::random(256), 'password' => $this->user->plainPassword]
         );
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-
         $response->assertJsonPath('error', 'EMAIL_TOO_LONG');
     }
 
@@ -74,10 +87,9 @@ class PostLoginTest extends MigrationTestCase
      */
     public function testEmailValidationNotFound()
     {
-        $response = $this->postJson(route('login'), ['email' => 'I@dont.exist', 'password' => 'fakePassword$2']);
+        $response = $this->postJson(route('login'), ['email' => 'I@dont.exist', 'password' => $this->user->plainPassword]);
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-
         $response->assertJsonPath('error', 'EMAIL_NOT_FOUND');
     }
 
@@ -86,10 +98,9 @@ class PostLoginTest extends MigrationTestCase
      */
     public function testPasswordValidationRequired()
     {
-        $response = $this->postJson(route('login'), ['email' => 'admin@gmail.com', 'password' => null]);
+        $response = $this->postJson(route('login'), ['email' => $this->user->email, 'password' => null]);
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-
         $response->assertJsonPath('error', 'PASSWORD_REQUIRED');
     }
 
@@ -98,10 +109,9 @@ class PostLoginTest extends MigrationTestCase
      */
     public function testPasswordValidationInvalid()
     {
-        $response = $this->postJson(route('login'), ['email' => 'admin@gmail.com', 'password' => true]);
+        $response = $this->postJson(route('login'), ['email' => $this->user->email, 'password' => true]);
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-
         $response->assertJsonPath('error', 'PASSWORD_INVALID');
     }
 
@@ -110,10 +120,9 @@ class PostLoginTest extends MigrationTestCase
      */
     public function testPasswordValidationTooShort()
     {
-        $response = $this->postJson(route('login'), ['email' => 'admin@gmail.com', 'password' => 'short']);
+        $response = $this->postJson(route('login'), ['email' => $this->user->email, 'password' => 'short']);
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-
         $response->assertJsonPath('error', 'PASSWORD_TOO_SHORT');
     }
 
@@ -122,10 +131,9 @@ class PostLoginTest extends MigrationTestCase
      */
     public function testPasswordValidationTooLong()
     {
-        $response = $this->postJson(route('login'), ['email' => 'admin@gmail.com', 'password' => Str::random(256)]);
+        $response = $this->postJson(route('login'), ['email' => $this->user->email, 'password' => Str::random(256)]);
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-
         $response->assertJsonPath('error', 'PASSWORD_TOO_LONG');
     }
 }

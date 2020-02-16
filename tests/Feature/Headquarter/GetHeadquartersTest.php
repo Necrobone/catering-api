@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-use App\Role;
 use App\User;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
@@ -14,11 +13,7 @@ class GetHeadquartersTest extends TestCase
      */
     public function testSuccess()
     {
-        $user = factory(User::class)->create(
-            [
-                'role_id' => Role::ADMINISTRATOR
-            ]
-        );
+        $user = factory(User::class)->state('administrator')->create();
 
         $response = $this->getJson(route('headquarters.index', ['api_token' => $user->api_token]));
 
@@ -30,11 +25,7 @@ class GetHeadquartersTest extends TestCase
      */
     public function testEmployeeAuthorizationFail()
     {
-        $user = factory(User::class)->create(
-            [
-                'role_id' => Role::EMPLOYEE
-            ]
-        );
+        $user = factory(User::class)->state('employee')->create();
 
         $response = $this->getJson(route('headquarters.index', ['api_token' => $user->api_token]));
 
@@ -46,11 +37,7 @@ class GetHeadquartersTest extends TestCase
      */
     public function testUserAuthorizationFail()
     {
-        $user = factory(User::class)->create(
-            [
-                'role_id' => Role::USER
-            ]
-        );
+        $user = factory(User::class)->state('user')->create();
 
         $response = $this->getJson(route('headquarters.index', ['api_token' => $user->api_token]));
 
@@ -65,7 +52,6 @@ class GetHeadquartersTest extends TestCase
         $response = $this->getJson(route('headquarters.index'));
 
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
-
         $response->assertJsonPath('message', 'Unauthenticated.');
     }
 }

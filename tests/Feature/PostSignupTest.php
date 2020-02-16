@@ -18,7 +18,8 @@ class PostSignupTest extends TestCase
     {
         parent::setUp();
 
-        $this->user = factory(User::class)->make();
+        $this->user = factory(User::class)->state('user')->make();
+
         $this->user->makeVisible('password');
         $this->user->password = 'Madrid4$';
         $this->user->password_confirmation = $this->user->password;
@@ -32,7 +33,6 @@ class PostSignupTest extends TestCase
         $response = $this->postJson(route('signup'), $this->user->toArray());
 
         $response->assertStatus(Response::HTTP_CREATED);
-
         $this->assertDatabaseHas('users', ['email' => $this->user->email]);
     }
 
@@ -46,9 +46,7 @@ class PostSignupTest extends TestCase
         $response = $this->postJson(route('signup'), $this->user->toArray());
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-
         $response->assertJsonPath('error', 'FIRST_NAME_REQUIRED');
-
         $this->assertDatabaseMissing('users', ['email' => $this->user->email]);
     }
 
@@ -62,9 +60,7 @@ class PostSignupTest extends TestCase
         $response = $this->postJson(route('signup'), $this->user->toArray());
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-
         $response->assertJsonPath('error', 'FIRST_NAME_INVALID');
-
         $this->assertDatabaseMissing('users', ['email' => $this->user->email]);
     }
 
@@ -78,9 +74,7 @@ class PostSignupTest extends TestCase
         $response = $this->postJson(route('signup'), $this->user->toArray());
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-
         $response->assertJsonPath('error', 'FIRST_NAME_TOO_LONG');
-
         $this->assertDatabaseMissing('users', ['email' => $this->user->email]);
     }
 
@@ -94,9 +88,7 @@ class PostSignupTest extends TestCase
         $response = $this->postJson(route('signup'), $this->user->toArray());
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-
         $response->assertJsonPath('error', 'LAST_NAME_REQUIRED');
-
         $this->assertDatabaseMissing('users', ['email' => $this->user->email]);
     }
 
@@ -110,9 +102,7 @@ class PostSignupTest extends TestCase
         $response = $this->postJson(route('signup'), $this->user->toArray());
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-
         $response->assertJsonPath('error', 'LAST_NAME_INVALID');
-
         $this->assertDatabaseMissing('users', ['email' => $this->user->email]);
     }
 
@@ -126,9 +116,7 @@ class PostSignupTest extends TestCase
         $response = $this->postJson(route('signup'), $this->user->toArray());
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-
         $response->assertJsonPath('error', 'LAST_NAME_TOO_LONG');
-
         $this->assertDatabaseMissing('users', ['email' => $this->user->email]);
     }
 
@@ -142,9 +130,7 @@ class PostSignupTest extends TestCase
         $response = $this->postJson(route('signup'), $this->user->toArray());
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-
         $response->assertJsonPath('error', 'EMAIL_REQUIRED');
-
         $this->assertDatabaseMissing('users', ['email' => $this->user->email]);
     }
 
@@ -158,9 +144,7 @@ class PostSignupTest extends TestCase
         $response = $this->postJson(route('signup'), $this->user->toArray());
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-
         $response->assertJsonPath('error', 'EMAIL_INVALID');
-
         $this->assertDatabaseMissing('users', ['email' => $this->user->email]);
     }
 
@@ -174,9 +158,7 @@ class PostSignupTest extends TestCase
         $response = $this->postJson(route('signup'), $this->user->toArray());
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-
         $response->assertJsonPath('error', 'EMAIL_TOO_LONG');
-
         $this->assertDatabaseMissing('users', ['email' => $this->user->email]);
     }
 
@@ -185,16 +167,13 @@ class PostSignupTest extends TestCase
      */
     public function testEmailValidationExists()
     {
-        $user = factory(User::class)->create();
-
+        $user = factory(User::class)->state('administrator')->create();
         $this->user->email = $user->email;
 
         $response = $this->postJson(route('signup'), $this->user->toArray());
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-
         $response->assertJsonPath('error', 'EMAIL_EXISTS');
-
         $this->assertDatabaseHas('users', ['email' => $this->user->email]);
     }
 
@@ -208,9 +187,7 @@ class PostSignupTest extends TestCase
         $response = $this->postJson(route('signup'), $this->user->toArray());
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-
         $response->assertJsonPath('error', 'PASSWORD_REQUIRED');
-
         $this->assertDatabaseMissing('users', ['email' => $this->user->email]);
     }
 
@@ -224,9 +201,7 @@ class PostSignupTest extends TestCase
         $response = $this->postJson(route('signup'), $this->user->toArray());
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-
         $response->assertJsonPath('error', 'PASSWORD_UNMATCHED');
-
         $this->assertDatabaseMissing('users', ['email' => $this->user->email]);
     }
 
@@ -241,9 +216,7 @@ class PostSignupTest extends TestCase
         $response = $this->postJson(route('signup'), $this->user->toArray());
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-
         $response->assertJsonPath('error', 'PASSWORD_INVALID');
-
         $this->assertDatabaseMissing('users', ['email' => $this->user->email]);
     }
 
@@ -258,9 +231,7 @@ class PostSignupTest extends TestCase
         $response = $this->postJson(route('signup'), $this->user->toArray());
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-
         $response->assertJsonPath('error', 'PASSWORD_TOO_SHORT');
-
         $this->assertDatabaseMissing('users', ['email' => $this->user->email]);
     }
 
@@ -275,9 +246,7 @@ class PostSignupTest extends TestCase
         $response = $this->postJson(route('signup'), $this->user->toArray());
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-
         $response->assertJsonPath('error', 'PASSWORD_TOO_LONG');
-
         $this->assertDatabaseMissing('users', ['email' => $this->user->email]);
     }
 }

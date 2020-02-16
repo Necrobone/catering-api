@@ -14,9 +14,10 @@ class SupplierController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param AdminRequest $request
      * @return SupplierCollection
      */
-    public function index()
+    public function index(AdminRequest $request)
     {
         return new SupplierCollection(Supplier::all());
     }
@@ -49,10 +50,11 @@ class SupplierController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param AdminRequest $request
+     * @param int $id
      * @return SupplierResource
      */
-    public function show($id)
+    public function show(AdminRequest $request, $id)
     {
         return new SupplierResource(Supplier::findOrFail($id));
     }
