@@ -17,9 +17,10 @@ class DishController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param AdminRequest $request
      * @return DishCollection
      */
-    public function index()
+    public function index(AdminRequest $request)
     {
         return new DishCollection(Dish::all());
     }
@@ -65,10 +66,11 @@ class DishController extends Controller
     /**
      * Display the specified resource.
      *
+     * @param AdminRequest $request
      * @param int $id
      * @return DishResource
      */
-    public function show($id)
+    public function show(AdminRequest $request, $id)
     {
         return new DishResource(Dish::findOrFail($id));
     }

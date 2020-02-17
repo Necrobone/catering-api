@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AdminRequest;
-use App\Http\Requests\DestroyUser;
+use App\Http\Requests\DestroyEmployee;
 use App\Http\Requests\GetServices;
 use App\Http\Requests\ShowEmployee;
 use App\Http\Requests\StoreEmployee;
@@ -92,11 +92,11 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param DestroyUser $request
+     * @param DestroyEmployee $request
      * @param int $id
      * @return int
      */
-    public function destroy(DestroyUser $request, $id)
+    public function destroy(DestroyEmployee $request, $id)
     {
         return User::destroy($id);
     }
