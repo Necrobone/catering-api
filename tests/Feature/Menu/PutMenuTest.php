@@ -304,4 +304,38 @@ class PutMenuTest extends TestCase
         $response->assertJsonPath('error', 'EVENTS_NOT_FOUND');
         $this->assertDatabaseHas('menus', ['name' => $this->menu->name]);
     }
+
+    /**
+     * @return void
+     */
+    public function testNotFound()
+    {
+        $response = $this->putJson(
+            route(
+                'menus.update',
+                ['api_token' => $this->user->api_token, 'menu' => 0]
+            ),
+            $this->updatedMenu->toArray()
+        );
+
+        $response->assertNotFound();
+        $response->assertJsonPath('message', 'No query results for model [App\Menu] 0');
+    }
+
+    /**
+     * @return void
+     */
+    public function testFail()
+    {
+        $response = $this->putJson(
+            route(
+                'menus.update',
+                ['menu' => $this->menu->id]
+            ),
+            $this->updatedMenu->toArray()
+        );
+
+        $response->assertStatus(Response::HTTP_UNAUTHORIZED);
+        $response->assertJsonPath('message', 'Unauthenticated.');
+    }
 }

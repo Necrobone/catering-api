@@ -490,4 +490,38 @@ class PutDishTest extends TestCase
             'image'       => $this->dish->image
         ]);
     }
+
+    /**
+     * @return void
+     */
+    public function testNotFound()
+    {
+        $response = $this->putJson(
+            route(
+                'dishes.update',
+                ['api_token' => $this->user->api_token, 'dish' => 0]
+            ),
+            $this->updatedDish->toArray()
+        );
+
+        $response->assertNotFound();
+        $response->assertJsonPath('message', 'No query results for model [App\Dish] 0');
+    }
+
+    /**
+     * @return void
+     */
+    public function testFail()
+    {
+        $response = $this->putJson(
+            route(
+                'dishes.update',
+                ['dish' => $this->dish->id]
+            ),
+            $this->updatedDish->toArray()
+        );
+
+        $response->assertStatus(Response::HTTP_UNAUTHORIZED);
+        $response->assertJsonPath('message', 'Unauthenticated.');
+    }
 }

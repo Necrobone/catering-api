@@ -381,4 +381,18 @@ class PostEmployeeTest extends TestCase
         $response->assertJsonPath('error', 'ROLE_NOT_FOUND');
         $this->assertDatabaseMissing('users', ['email' => $this->employee->email]);
     }
+
+    /**
+     * @return void
+     */
+    public function testFail()
+    {
+        $response = $this->postJson(
+            route('employees.store'),
+            $this->employee->toArray()
+        );
+
+        $response->assertStatus(Response::HTTP_UNAUTHORIZED);
+        $response->assertJsonPath('message', 'Unauthenticated.');
+    }
 }

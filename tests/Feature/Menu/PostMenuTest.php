@@ -265,4 +265,18 @@ class PostMenuTest extends TestCase
         $response->assertJsonPath('error', 'EVENTS_NOT_FOUND');
         $this->assertDatabaseMissing('menus', ['name' => $this->menu->name]);
     }
+
+    /**
+     * @return void
+     */
+    public function testFail()
+    {
+        $response = $this->postJson(
+            route('menus.store'),
+            $this->menu->toArray()
+        );
+
+        $response->assertStatus(Response::HTTP_UNAUTHORIZED);
+        $response->assertJsonPath('message', 'Unauthenticated.');
+    }
 }

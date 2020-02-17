@@ -329,4 +329,18 @@ class PostHeadquarterTest extends TestCase
         $response->assertJsonPath('error', 'PROVINCE_NOT_FOUND');
         $this->assertDatabaseMissing('headquarters', $this->headquarter->toArray());
     }
+
+    /**
+     * @return void
+     */
+    public function testFail()
+    {
+        $response = $this->postJson(
+            route('headquarters.store'),
+            $this->headquarter->toArray()
+        );
+
+        $response->assertStatus(Response::HTTP_UNAUTHORIZED);
+        $response->assertJsonPath('message', 'Unauthenticated.');
+    }
 }

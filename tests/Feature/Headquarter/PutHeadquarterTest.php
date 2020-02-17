@@ -387,4 +387,38 @@ class PutHeadquarterTest extends TestCase
         $response->assertJsonPath('error', 'PROVINCE_NOT_FOUND');
         $this->assertDatabaseHas('headquarters', $this->headquarter->toArray());
     }
+
+    /**
+     * @return void
+     */
+    public function testNotFound()
+    {
+        $response = $this->putJson(
+            route(
+                'headquarters.update',
+                ['api_token' => $this->user->api_token, 'headquarters' => 0]
+            ),
+            $this->updatedHeadquarter->toArray()
+        );
+
+        $response->assertNotFound();
+        $response->assertJsonPath('message', 'No query results for model [App\Headquarter] 0');
+    }
+
+    /**
+     * @return void
+     */
+    public function testFail()
+    {
+        $response = $this->putJson(
+            route(
+                'headquarters.update',
+                ['headquarters' => $this->headquarter->id]
+            ),
+            $this->updatedHeadquarter->toArray()
+        );
+
+        $response->assertStatus(Response::HTTP_UNAUTHORIZED);
+        $response->assertJsonPath('message', 'Unauthenticated.');
+    }
 }

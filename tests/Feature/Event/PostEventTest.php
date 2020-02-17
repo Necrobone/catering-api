@@ -122,4 +122,18 @@ class PostEventTest extends TestCase
         $response->assertJsonPath('error', 'NAME_TOO_LONG');
         $this->assertDatabaseMissing('events', $this->event->toArray());
     }
+
+    /**
+     * @return void
+     */
+    public function testFail()
+    {
+        $response = $this->postJson(
+            route('events.store'),
+            $this->event->toArray()
+        );
+
+        $response->assertStatus(Response::HTTP_UNAUTHORIZED);
+        $response->assertJsonPath('message', 'Unauthenticated.');
+    }
 }

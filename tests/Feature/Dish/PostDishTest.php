@@ -412,4 +412,18 @@ class PostDishTest extends TestCase
         $response->assertJsonPath('error', 'EVENTS_NOT_FOUND');
         $this->assertDatabaseMissing('dishes', ['name' => $this->dish->name]);
     }
+
+    /**
+     * @return void
+     */
+    public function testFail()
+    {
+        $response = $this->postJson(
+            route('dishes.store'),
+            $this->dish->toArray()
+        );
+
+        $response->assertStatus(Response::HTTP_UNAUTHORIZED);
+        $response->assertJsonPath('message', 'Unauthenticated.');
+    }
 }

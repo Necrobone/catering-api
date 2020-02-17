@@ -128,4 +128,32 @@ class PutEventTest extends TestCase
         $response->assertJsonPath('error', 'NAME_TOO_LONG');
         $this->assertDatabaseHas('events', $this->event->toArray());
     }
+
+    /**
+     * @return void
+     */
+    public function testNotFound()
+    {
+        $response = $this->putJson(
+            route('events.update', ['api_token' => $this->user->api_token, 'event' => 0]),
+            $this->updatedEvent->toArray()
+        );
+
+        $response->assertNotFound();
+        $response->assertJsonPath('message', 'No query results for model [App\Event] 0');
+    }
+
+    /**
+     * @return void
+     */
+    public function testFail()
+    {
+        $response = $this->putJson(
+            route('events.update', ['event' => $this->event->id]),
+            $this->updatedEvent->toArray()
+        );
+
+        $response->assertStatus(Response::HTTP_UNAUTHORIZED);
+        $response->assertJsonPath('message', 'Unauthenticated.');
+    }
 }

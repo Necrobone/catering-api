@@ -222,4 +222,38 @@ class PutSupplierTest extends TestCase
         $response->assertJsonPath('error', 'HEADQUARTERS_NOT_FOUND');
         $this->assertDatabaseHas('suppliers', ['name' => $this->supplier->name]);
     }
+
+    /**
+     * @return void
+     */
+    public function testNotFound()
+    {
+        $response = $this->putJson(
+            route(
+                'suppliers.update',
+                ['api_token' => $this->user->api_token, 'supplier' => 0]
+            ),
+            $this->updatedSupplier->toArray()
+        );
+
+        $response->assertNotFound();
+        $response->assertJsonPath('message', 'No query results for model [App\Supplier] 0');
+    }
+
+    /**
+     * @return void
+     */
+    public function testFail()
+    {
+        $response = $this->putJson(
+            route(
+                'suppliers.update',
+                ['supplier' => $this->supplier->id]
+            ),
+            $this->updatedSupplier->toArray()
+        );
+
+        $response->assertStatus(Response::HTTP_UNAUTHORIZED);
+        $response->assertJsonPath('message', 'Unauthenticated.');
+    }
 }

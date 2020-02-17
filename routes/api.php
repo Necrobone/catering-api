@@ -32,5 +32,5 @@ Route::middleware('auth:api')->group(function () {
 
     Route::apiResource('services', 'ServiceController')->except('destroy');
 
-    Route::match(['put', 'patch'], '/services/{service}/toggle', 'ServiceController@toggle')->name('toggle');
+    Route::match(['put', 'patch'], '/services/{service}/toggle', 'ServiceController@toggle')->name('services.toggle');
 });

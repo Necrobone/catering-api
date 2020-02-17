@@ -194,4 +194,18 @@ class PostSupplierTest extends TestCase
         $response->assertJsonPath('error', 'HEADQUARTERS_NOT_FOUND');
         $this->assertDatabaseMissing('suppliers', ['name' => $this->supplier->name]);
     }
+
+    /**
+     * @return void
+     */
+    public function testFail()
+    {
+        $response = $this->postJson(
+            route('suppliers.store'),
+            $this->supplier->toArray()
+        );
+
+        $response->assertStatus(Response::HTTP_UNAUTHORIZED);
+        $response->assertJsonPath('message', 'Unauthenticated.');
+    }
 }

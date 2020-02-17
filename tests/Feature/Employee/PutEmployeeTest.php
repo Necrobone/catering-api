@@ -388,4 +388,32 @@ class PutEmployeeTest extends TestCase
         $response->assertJsonPath('error', 'ROLE_NOT_FOUND');
         $this->assertDatabaseMissing('users', ['email' => $this->updatedEmployee->email]);
     }
+
+    /**
+     * @return void
+     */
+    public function testNotFound()
+    {
+        $response = $this->putJson(
+            route('employees.update', ['api_token' => $this->user->api_token, 'employee' => 0]),
+            $this->updatedEmployee->toArray()
+        );
+
+        $response->assertNotFound();
+        $response->assertJsonPath('message', 'No query results for model [App\User] 0');
+    }
+
+    /**
+     * @return void
+     */
+    public function testFail()
+    {
+        $response = $this->putJson(
+            route('employees.update', ['employee' => $this->employee->id]),
+            $this->updatedEmployee->toArray()
+        );
+
+        $response->assertStatus(Response::HTTP_UNAUTHORIZED);
+        $response->assertJsonPath('message', 'Unauthenticated.');
+    }
 }

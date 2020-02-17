@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Dish;
+use App\Http\Requests\AdminRequest;
+use App\Http\Requests\GetService;
 use App\Http\Requests\StoreService;
 use App\Http\Requests\ToggleService;
 use App\Http\Requests\UpdateService;
@@ -18,9 +20,10 @@ class ServiceController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param AdminRequest $request
      * @return ServiceCollection
      */
-    public function index()
+    public function index(AdminRequest $request)
     {
         return new ServiceCollection(Service::all());
     }
@@ -64,10 +67,11 @@ class ServiceController extends Controller
     /**
      * Display the specified resource.
      *
+     * @param GetService $request
      * @param int $id
      * @return ServiceResource
      */
-    public function show($id)
+    public function show(GetService $request, $id)
     {
         return new ServiceResource(Service::findOrFail($id));
     }
