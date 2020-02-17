@@ -15,9 +15,10 @@ class MenuController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param AdminRequest $request
      * @return MenuCollection
      */
-    public function index()
+    public function index(AdminRequest $request)
     {
         return new MenuCollection(Menu::all());
     }
@@ -55,10 +56,11 @@ class MenuController extends Controller
     /**
      * Display the specified resource.
      *
+     * @param AdminRequest $request
      * @param int $id
      * @return MenuResource
      */
-    public function show($id)
+    public function show(AdminRequest $request, $id)
     {
         return new MenuResource(Menu::findOrFail($id));
     }
