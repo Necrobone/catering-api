@@ -39,8 +39,8 @@ class UserController extends Controller
     {
         $user = new User();
 
-        $user->first_name = $request->first_name;
-        $user->last_name = $request->last_name;
+        $user->first_name = $request->firstName;
+        $user->last_name = $request->lastName;
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
         $user->api_token = Str::random(60);
@@ -75,8 +75,8 @@ class UserController extends Controller
         /** @var User $user */
         $user = User::findOrFail($id);
 
-        $user->first_name = $request->first_name;
-        $user->last_name = $request->last_name;
+        $user->first_name = $request->firstName;
+        $user->last_name = $request->lastName;
         $user->email = $request->email;
         $user->role_id = $request->role;
 

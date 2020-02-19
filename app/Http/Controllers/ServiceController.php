@@ -109,7 +109,7 @@ class ServiceController extends Controller
         }
 
         $service->dishes()->sync($dishes);
-        $service->users()->sync($dishes);
+        $service->users()->sync($users);
 
         return new ServiceResource($service);
     }

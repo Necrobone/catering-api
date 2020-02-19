@@ -31,12 +31,12 @@ class StoreEmployee extends FormRequest
     public function rules()
     {
         return [
-            'first_name' => [
+            'firstName' => [
                 'required',
                 'string',
                 'max:255',
             ],
-            'last_name'  => [
+            'lastName'  => [
                 'required',
                 'string',
                 'max:255',
@@ -75,12 +75,12 @@ class StoreEmployee extends FormRequest
     public function messages()
     {
         return [
-            'first_name.required' => 'FIRST_NAME_REQUIRED',
-            'first_name.string'   => 'FIRST_NAME_INVALID',
-            'first_name.max'      => 'FIRST_NAME_TOO_LONG',
-            'last_name.required'  => 'LAST_NAME_REQUIRED',
-            'last_name.string'    => 'LAST_NAME_INVALID',
-            'last_name.max'       => 'LAST_NAME_TOO_LONG',
+            'firstName.required' => 'FIRST_NAME_REQUIRED',
+            'firstName.string'   => 'FIRST_NAME_INVALID',
+            'firstName.max'      => 'FIRST_NAME_TOO_LONG',
+            'lastName.required'  => 'LAST_NAME_REQUIRED',
+            'lastName.string'    => 'LAST_NAME_INVALID',
+            'lastName.max'       => 'LAST_NAME_TOO_LONG',
             'email.required'     => 'EMAIL_REQUIRED',
             'email.string'       => 'EMAIL_INVALID',
             'email.email'        => 'EMAIL_INVALID',
