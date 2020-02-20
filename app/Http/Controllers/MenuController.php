@@ -15,10 +15,9 @@ class MenuController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param AdminRequest $request
      * @return MenuCollection
      */
-    public function index(AdminRequest $request)
+    public function index()
     {
         return new MenuCollection(Menu::all());
     }

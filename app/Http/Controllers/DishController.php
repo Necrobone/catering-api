@@ -17,10 +17,9 @@ class DishController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param AdminRequest $request
      * @return DishCollection
      */
-    public function index(AdminRequest $request)
+    public function index()
     {
         return new DishCollection(Dish::all());
     }
