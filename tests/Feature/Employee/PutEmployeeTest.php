@@ -33,6 +33,8 @@ class PutEmployeeTest extends TestCase
         $this->updatedEmployee->makeVisible('password');
         $this->updatedEmployee->password = 'Madrid4$';
         $this->updatedEmployee->role = $this->updatedEmployee->role_id;
+        $this->updatedEmployee->firstName = $this->updatedEmployee->first_name;
+        $this->updatedEmployee->lastName = $this->updatedEmployee->last_name;
 
         $this->employee = factory(User::class)->state('employee')->create();
         $this->user = factory(User::class)->state('administrator')->create();
@@ -105,7 +107,7 @@ class PutEmployeeTest extends TestCase
      */
     public function testFirstNameValidationRequired()
     {
-        $this->updatedEmployee->first_name = null;
+        $this->updatedEmployee->firstName = null;
 
         $response = $this->putJson(
             route('employees.update', ['api_token' => $this->user->api_token, 'employee' => $this->employee->id]),
@@ -122,7 +124,7 @@ class PutEmployeeTest extends TestCase
      */
     public function testFirstNameValidationInvalid()
     {
-        $this->updatedEmployee->first_name = true;
+        $this->updatedEmployee->firstName = true;
 
         $response = $this->putJson(
             route('employees.update', ['api_token' => $this->user->api_token, 'employee' => $this->employee->id]),
@@ -139,7 +141,7 @@ class PutEmployeeTest extends TestCase
      */
     public function testFirstNameValidationTooLong()
     {
-        $this->updatedEmployee->first_name = Str::random(256);
+        $this->updatedEmployee->firstName = Str::random(256);
 
         $response = $this->putJson(
             route('employees.update', ['api_token' => $this->user->api_token, 'employee' => $this->employee->id]),
@@ -156,7 +158,7 @@ class PutEmployeeTest extends TestCase
      */
     public function testLastNameValidationRequired()
     {
-        $this->updatedEmployee->last_name = null;
+        $this->updatedEmployee->lastName = null;
 
         $response = $this->putJson(
             route('employees.update', ['api_token' => $this->user->api_token, 'employee' => $this->employee->id]),
@@ -173,7 +175,7 @@ class PutEmployeeTest extends TestCase
      */
     public function testLastNameValidationInvalid()
     {
-        $this->updatedEmployee->last_name = true;
+        $this->updatedEmployee->lastName = true;
 
         $response = $this->putJson(
             route('employees.update', ['api_token' => $this->user->api_token, 'employee' => $this->employee->id]),
@@ -190,7 +192,7 @@ class PutEmployeeTest extends TestCase
      */
     public function testLastNameValidationTooLong()
     {
-        $this->updatedEmployee->last_name = Str::random(256);
+        $this->updatedEmployee->lastName = Str::random(256);
 
         $response = $this->putJson(
             route('employees.update', ['api_token' => $this->user->api_token, 'employee' => $this->employee->id]),
@@ -344,23 +346,6 @@ class PutEmployeeTest extends TestCase
     public function testRoleValidationInvalid()
     {
         $this->updatedEmployee->role = 'wrongrole';
-
-        $response = $this->putJson(
-            route('employees.update', ['api_token' => $this->user->api_token, 'employee' => $this->employee->id]),
-            $this->updatedEmployee->toArray()
-        );
-
-        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-        $response->assertJsonPath('error', 'ROLE_INVALID');
-        $this->assertDatabaseMissing('users', ['email' => $this->updatedEmployee->email]);
-    }
-
-    /**
-     * @return void
-     */
-    public function testRoleUserValidationInvalid()
-    {
-        $this->updatedEmployee->role = Role::EMPLOYEE;
 
         $response = $this->putJson(
             route('employees.update', ['api_token' => $this->user->api_token, 'employee' => $this->employee->id]),

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Dish;
 use App\Event;
 use App\Http\Requests\AdminRequest;
+use App\Http\Requests\GetDishes;
 use App\Http\Requests\PersistDish;
 use App\Http\Resources\Dish as DishResource;
 use App\Http\Resources\DishCollection;
@@ -17,9 +18,10 @@ class DishController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param GetDishes $request
      * @return DishCollection
      */
-    public function index()
+    public function index(GetDishes $request)
     {
         return new DishCollection(Dish::all());
     }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Dish;
 use App\Event;
 use App\Http\Requests\AdminRequest;
+use App\Http\Requests\GetMenus;
 use App\Http\Requests\PersistMenu;
 use App\Http\Resources\Menu as MenuResource;
 use App\Http\Resources\MenuCollection;
@@ -15,9 +16,10 @@ class MenuController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param GetMenus $request
      * @return MenuCollection
      */
-    public function index()
+    public function index(GetMenus $request)
     {
         return new MenuCollection(Menu::all());
     }

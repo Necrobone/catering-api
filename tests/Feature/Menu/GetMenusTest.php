@@ -23,21 +23,21 @@ class GetMenusTest extends TestCase
     /**
      * @return void
      */
-    public function testEmployeeAuthorizationFail()
+    public function testUserSuccess()
     {
-        $user = factory(User::class)->state('employee')->create();
+        $user = factory(User::class)->state('user')->create();
 
         $response = $this->getJson(route('menus.index', ['api_token' => $user->api_token]));
 
-        $response->assertStatus(Response::HTTP_FORBIDDEN);
+        $response->assertOk();
     }
 
     /**
      * @return void
      */
-    public function testUserAuthorizationFail()
+    public function testEmployeeAuthorizationFail()
     {
-        $user = factory(User::class)->state('user')->create();
+        $user = factory(User::class)->state('employee')->create();
 
         $response = $this->getJson(route('menus.index', ['api_token' => $user->api_token]));
 

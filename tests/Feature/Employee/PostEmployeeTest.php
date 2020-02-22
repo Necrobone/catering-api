@@ -28,6 +28,8 @@ class PostEmployeeTest extends TestCase
         $this->employee->makeVisible('password');
         $this->employee->password = 'Madrid4$';
         $this->employee->role = $this->employee->role_id;
+        $this->employee->firstName = $this->employee->first_name;
+        $this->employee->lastName = $this->employee->last_name;
 
         $this->user = factory(User::class)->state('administrator')->create();
     }
@@ -81,7 +83,7 @@ class PostEmployeeTest extends TestCase
      */
     public function testFirstNameValidationRequired()
     {
-        $this->employee->first_name = null;
+        $this->employee->firstName = null;
 
         $response = $this->postJson(
             route('employees.store', ['api_token' => $this->user->api_token]),
@@ -98,7 +100,7 @@ class PostEmployeeTest extends TestCase
      */
     public function testFirstNameValidationInvalid()
     {
-        $this->employee->first_name = true;
+        $this->employee->firstName = true;
 
         $response = $this->postJson(
             route('employees.store', ['api_token' => $this->user->api_token]),
@@ -115,7 +117,7 @@ class PostEmployeeTest extends TestCase
      */
     public function testFirstNameValidationTooLong()
     {
-        $this->employee->first_name = Str::random(256);
+        $this->employee->firstName = Str::random(256);
 
         $response = $this->postJson(
             route('employees.store', ['api_token' => $this->user->api_token]),
@@ -132,7 +134,7 @@ class PostEmployeeTest extends TestCase
      */
     public function testLastNameValidationRequired()
     {
-        $this->employee->last_name = null;
+        $this->employee->lastName = null;
 
         $response = $this->postJson(
             route('employees.store', ['api_token' => $this->user->api_token]),
@@ -149,7 +151,7 @@ class PostEmployeeTest extends TestCase
      */
     public function testLastNameValidationInvalid()
     {
-        $this->employee->last_name = true;
+        $this->employee->lastName = true;
 
         $response = $this->postJson(
             route('employees.store', ['api_token' => $this->user->api_token]),
@@ -166,7 +168,7 @@ class PostEmployeeTest extends TestCase
      */
     public function testLastNameValidationTooLong()
     {
-        $this->employee->last_name = Str::random(256);
+        $this->employee->lastName = Str::random(256);
 
         $response = $this->postJson(
             route('employees.store', ['api_token' => $this->user->api_token]),
